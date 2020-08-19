@@ -21,13 +21,13 @@ function Menu(){
                 </div>
                 <nav className="nav-menu d-none d-lg-block">
                 <ul>
-                    {/* <li className="active"><a href="#index.html">Home</a></li> */}
+                    {/* <li className="active"><a href="/#index.html">Home</a></li> */}
                     <li><Link to="/">Home</Link></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
-                    <li><a href="#team">Team</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/#services">Services</a></li>
+                    <li><a href="/#portfolio">Portfolio</a></li>
+                    <li><a href="/#team">Team</a></li>
+                    <li><a href="/#pricing">Pricing</a></li>
                     <li className="drop-down"><a href>Drop Down</a>
                     <ul>
                         <li><a href="">Drop Down 1</a></li>
