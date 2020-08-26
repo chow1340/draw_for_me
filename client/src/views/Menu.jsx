@@ -1,6 +1,8 @@
 import React from 'react';
 import Home from './Home';
 import LogIn from './LogIn';
+import Example from './Example';
+import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,52 +13,26 @@ function Menu(){
     return(
         <Router>
         <div>
-        {/* ======= Header ======= */}
-        <header id="header" className="fixed-top d-flex align-items-center">
-            <div className="container d-flex align-items-center">
-                <div className="logo mr-auto">
-                <h1 className="text-light"><a href="index.html"><span>Draw For Me</span></a></h1>
-                {/* Uncomment below if you prefer to use an image logo */}
-                {/* <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>*/}
-                </div>
-                <nav className="nav-menu d-none d-lg-block">
-                <ul>
-                    {/* <li className="active"><a href="/#index.html">Home</a></li> */}
-                    <li><Link to="/">Home</Link></li>
-                    <li><a href="/#about">About</a></li>
-                    <li><a href="/#services">Services</a></li>
-                    <li><a href="/#portfolio">Portfolio</a></li>
-                    <li><a href="/#team">Team</a></li>
-                    <li><a href="/#pricing">Pricing</a></li>
-                    <li className="drop-down"><a href>Drop Down</a>
-                    <ul>
-                        <li><a href="">Drop Down 1</a></li>
-                        <li className="drop-down"><a href="">Drop Down 2</a>
-                        <ul>
-                            <li><a href="">Deep Drop Down 1</a></li>
-                            <li><a href="">Deep Drop Down 2</a></li>
-                            <li><a href="">Deep Drop Down 3</a></li>
-                            <li><a href="">Deep Drop Down 4</a></li>
-                            <li><a href="">Deep Drop Down 5</a></li>
-                        </ul>
-                        </li>
-                        <li><a href="">Drop Down 3</a></li>
-                        <li><a href="">Drop Down 4</a></li>
-                        <li><a href="">Drop Down 5</a></li>
-                    </ul>
-                    </li>
-                    <li><a href="contact">Contact</a></li>
-                    <li className="get-started"><Link to="logIn">Log In</Link></li>
-
-                </ul>
-                </nav>{/* .nav-menu */}
-            </div>
+        {/* <Route path="/" exact component={Home} /> */}
             
-            </header>{/* End Header */}
-
+        <Navbar bg="w" variant="light">
+            <Navbar.Brand href="#home">Draw For Me</Navbar.Brand>
+            <Nav className="mr-auto">
+            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="#pricing"><Link to="example">E</Link></Nav.Link>
+            <Nav.Link href="#pricing"><Link to="logIn">Create User</Link></Nav.Link>
+            </Nav>
+            <Form inline>
+            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+            <Button variant="outline-primary">Search</Button>
+            </Form>
+        </Navbar>
         </div>
-         {/* <Route path="/" exact component={Home} /> */}
-         <Route path="/logIn" exact component={LogIn} />
+        
+        <Route path="/logIn" exact component={LogIn} />
+        <Route path="/example" exact component = {Example} />
         </Router>
     );
 }

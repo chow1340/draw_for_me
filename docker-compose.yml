@@ -2,24 +2,30 @@ version: '3.7'
 
 services:
   #SERVER SETUP
-  server:
-    build: ./server
-    expose:
-      - ${APP_SERVER_PORT}
-    environment:
-      API_HOST: ${API_HOST}
-      APP_SERVER_PORT: ${APP_SERVER_PORT}
-    ports:
-      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
-    volumes:
-      - ./server/src:/srv/app/server/src
-    stdin_open: true
-    command: npm run start.dev
-      
+  # server:
+  #   build: ./server
+  #   expose:
+  #     - ${APP_SERVER_PORT}
+  #   environment:
+  #     API_HOST: ${API_HOST}
+  #     APP_SERVER_PORT: ${APP_SERVER_PORT}
+  #     DB_HOSTNAME: ${DB_HOSTNAME}
+  #     DB_USERNAME: ${DB_USERNAME}
+  #     DB_PASSWORD: ${DB_PASSWORD}
+  #     DB_PORT: ${DB_PORT}
+  #     DB_DATABASE: ${DB_DATABASE}
+  #   ports:
+  #     - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+  #   volumes:
+  #     - ./server/src:/srv/app/server/src
+  #   stdin_open: true
+  #   command: npm run start.dev
+
+
   #CLIENT SERVER SETUP
   client:
     build: ./client
-    environment: 
+    environment:
       - PORT=${REACT_APP_PORT}
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
@@ -31,5 +37,36 @@ services:
       - ./client/src:/srv/app/client/src
       - ./client/public:/srv/app/client/public
     links:
-      - server
+      - api
     command: npm start
+
+  #BACKEND SETUP
+#  backend:
+#    build: ./backend
+#    ports:
+#      - "8080:8080"
+#    restart: always
+#    environment:
+#      SPRING_DATA_SOURCE_URL: ${SPRING_DATA_SOURCE_URL}
+#      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+#      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+
+  api:
+    build: ./api
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./api:/api
+    working_dir: /api
+    user: appuser
+    environment:
+      SPRING_DATA_SOURCE_URL: ${SPRING_DATA_SOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    command: ./gradlew --project-cache-dir /tmp/gradle-cache bootRun
+
+
+
+
+
