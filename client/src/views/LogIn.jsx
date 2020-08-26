@@ -16,7 +16,7 @@ const LogIn = () => {
   const onSubmit = data => {
     axios.post(
       '/api/user/add',
-      user
+      data,
     )
     .then(res => {
         console.log(`Axios Call completed: ${JSON.stringify(res)}`)
@@ -25,7 +25,7 @@ const LogIn = () => {
       console.log(`Axios Call Error: ${JSON.stringify(err)}`)
     });
 
-    console.log(user);
+    console.log(data);
   }
   
 
