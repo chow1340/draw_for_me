@@ -6,11 +6,11 @@ import { useForm } from "react-hook-form";
 
 
 
-const LogIn = () => {
+const Register = () => {
   const { handleSubmit, register, watch, errors } = useForm(); 
   const onSubmit = data => {
     axios.post(
-      '/api/user/logIn',
+      '/api/user/register',
       data,
     )
     .then(res => {
@@ -53,6 +53,17 @@ const LogIn = () => {
             ref={register({
             })}
             />
+
+          </Form.Group>
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control name="confirmPassword" type="password" placeholder="Confirm Password"
+            ref={register({
+              validate: (value) => value === watch('password') || 
+              <p>Passwords do not match</p>, 
+            })} 
+             />
+             {errors.confirmPassword && errors.confirmPassword.message}
           </Form.Group>
           <Button variant="primary" type="submit">
             Create User
@@ -64,4 +75,4 @@ const LogIn = () => {
     );
 };
 
-export default LogIn
+export default Register

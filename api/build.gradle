@@ -1,0 +1,96 @@
+
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.github.mowedgrass:jasypt-gradle-boot-plugin:0.1.33'
+    }
+}
+
+
+plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+//    id 'encrypt'
+//    id 'com.palantir.docker' version '0.25.0'
+}
+
+jar {
+    baseName = 'api'
+    version = '0.0.1-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+bootRun {
+    systemProperties = System.properties
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    implementation 'org.springframework.security:spring-security-core:5.3.4.RELEASE'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compile('org.springframework.boot:spring-boot-starter-web')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+//
+//group = 'com.example'
+//version = '0.0.1-SNAPSHOT'
+//sourceCompatibility = '11'
+//repositories {
+//    mavenCentral()
+//}
+//
+//apply plugin: 'java'
+//apply plugin: 'eclipse'
+//apply plugin: 'org.springframework.boot'
+//apply plugin: 'io.spring.dependency-management'
+//
+//jar {
+//    baseName = 'hot-spring-docker'
+//    version = '0.0.1-SNAPSHOT'
+//}
+//docker{
+//    name "draw_for_me_backend"
+//    copySpec.from(jar).rename(".*","app.jar")
+//    buildArgs(['JAR_FILE':"app.jar"])
+//}
+
+//
+//dependencies {
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-devtools'
+
+//}
+

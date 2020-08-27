@@ -1,7 +1,8 @@
 import React from 'react';
 import Home from './Home';
-import LogIn from './LogIn';
+import Register from './Register';
 import Example from './Example';
+import LogIn from './LogIn'
 import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import {
   BrowserRouter as Router,
@@ -21,8 +22,9 @@ function Menu(){
             <Nav.Link href="/home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>
             <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <Nav.Link href="#pricing"><Link to="example">E</Link></Nav.Link>
-            <Nav.Link href="#pricing"><Link to="logIn">Create User</Link></Nav.Link>
+            <Nav.Link ><Link to="example">E</Link></Nav.Link>
+            <Nav.Link ><Link to="register">Create User</Link></Nav.Link>
+            <Nav.Link ><Link to="logIn">Log In</Link></Nav.Link>
             </Nav>
             <Form inline>
             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -31,6 +33,7 @@ function Menu(){
         </Navbar>
         </div>
         
+        <Route path="/register" exact component={Register} />
         <Route path="/logIn" exact component={LogIn} />
         <Route path="/example" exact component = {Example} />
         </Router>
