@@ -17,7 +17,7 @@ function Menu(){
         {/* <Route path="/" exact component={Home} /> */}
             
         <Navbar bg="w" variant="light">
-            <Navbar.Brand href="#home">Draw For Me</Navbar.Brand>
+            <Navbar.Brand href="/">Draw For Me</Navbar.Brand>
             <Nav className="mr-auto">
             <Nav.Link href="/home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>

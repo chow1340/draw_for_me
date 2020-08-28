@@ -5,18 +5,14 @@ import com.example.api.enumerations.LogInResult;
 import com.example.api.enumerations.RegisterResult;
 import com.example.api.objects.UserDTO;
 import com.example.api.repositories.UserRepository;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.api.helpers.UserSpecifications;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.swing.text.html.parser.Entity;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -28,7 +24,6 @@ public class UserService {
     private UserRepository userRepository;
     private UserSpecifications userSpecifications;
 
-
     public boolean checkIfExists(String columnName, String value){
         List<User> users = userRepository.findAll(userSpecifications.byColumnNameAndValue(columnName, value));
         if(users.size() > 0) {
@@ -36,6 +31,8 @@ public class UserService {
         }
         return false;
     }
+
+
     public RegisterResult registerNewUser(UserDTO userDTO){
         if(checkIfExists("email", userDTO.getEmail())) {
             return RegisterResult.EMAIL_EXISTS;
@@ -47,9 +44,18 @@ public class UserService {
         return RegisterResult.REGISTER_SUCCESS;
     }
 
-    public LogInResult logInUser(UserDTO userDTO){
-        List<User> user = userRepository.findAll(userSpecifications.byColumnNameAndValue("email", userDTO.getEmail()));
-        if(user.size() == 0) return LogInResult.USER_DOES_NOT_EXIST;
+    public LogInResult logInUser(@NotNull UserDTO userDTO, HttpServletRequest req){
+        List<User> findUsers = userRepository.findAll(userSpecifications.byColumnNameAndValue("email", userDTO.getEmail()));
+
+        if(findUsers.size() == 0) {return LogInResult.USER_DOES_NOT_EXIST;}
+        User dbUser = findUsers.get(0);
+        if(!passwordEncoder.matches(userDTO.getPassword(),dbUser.getPassword())){
+            return LogInResult.PASSWORD_DO_NOT_MATCH;
+        }
+//        //Create session
+//        System.out.println(req.getParameterMap());
+//        req.getSession().setAttribute("tesName", "testVal");
+
         return LogInResult.LOG_IN_SUCCESS;
     };
 }

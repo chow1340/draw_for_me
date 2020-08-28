@@ -55,7 +55,7 @@ const LogIn = () => {
             />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Create User
+            Log In
           </Button>
         </Form>
       </form>
