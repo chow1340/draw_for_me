@@ -10,7 +10,7 @@ const Register = () => {
   const { handleSubmit, register, watch, errors } = useForm(); 
   const onSubmit = data => {
     axios.post(
-      '/api/user/register',
+      '/api/auth/signup',
       data,
     )
     .then(res => {

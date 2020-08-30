@@ -3,7 +3,7 @@ package com.example.api.services;
 import com.example.api.entities.User;
 import com.example.api.enumerations.LogInResult;
 import com.example.api.enumerations.RegisterResult;
-import com.example.api.objects.UserDTO;
+import com.example.api.payloads.UserDTO;
 import com.example.api.repositories.UserRepository;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.api.helpers.UserSpecifications;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -49,6 +48,7 @@ public class UserService {
 
         if(findUsers.size() == 0) {return LogInResult.USER_DOES_NOT_EXIST;}
         User dbUser = findUsers.get(0);
+
         if(!passwordEncoder.matches(userDTO.getPassword(),dbUser.getPassword())){
             return LogInResult.PASSWORD_DO_NOT_MATCH;
         }

@@ -14,10 +14,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor {
     @Query(value = "SELECT * FROM User u WHERE u.email = ?2 ", nativeQuery = true)
     List<User> findByColumn(String column, String email);
+
+    Optional<User> findByUsername(String username);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 
 }

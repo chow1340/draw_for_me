@@ -13,7 +13,7 @@ public class HelloController {
 //    @Value("${db.password}")
 //    private String password;
 
-    @RequestMapping("/api/test")
+    @RequestMapping("/")
     public String index(){
         return "Greetingss";
     }

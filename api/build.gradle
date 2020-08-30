@@ -44,6 +44,13 @@ bootRun {
 }
 
 dependencies {
+    implementation 'io.jsonwebtoken:jjwt:0.6.0'
+    compile "org.springframework.security:spring-security-web"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.security:spring-security-config"
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.3.3.RELEASE'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.5.0.RELEASE'
     implementation 'org.springframework.session:spring-session-data-redis:2.3.0.RELEASE'
     implementation 'redis.clients:jedis:3.3.0'
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
@@ -66,6 +73,7 @@ test {
     useJUnitPlatform()
 }
 
+ext['spring-security.version']='5.3.4.RELEASE'
 
 //
 //group = 'com.example'
