@@ -4,6 +4,8 @@ import com.example.api.security.services.UserDetailsImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
@@ -51,5 +53,13 @@ public class JwtUtils {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    public HttpCookie createCookieWithToken(String name, String token, int maxAge){
+        return ResponseCookie.from(name, token)
+                .httpOnly(true)
+                .maxAge(maxAge)
+                .path("/")
+                .build();
     }
 }

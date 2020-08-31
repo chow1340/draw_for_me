@@ -2,18 +2,33 @@ package com.example.api.controllers;
 
 import com.example.api.entities.Role;
 import com.example.api.entities.User;
+import com.example.api.enumerations.LogInResult;
 import com.example.api.enumerations.RoleEnum;
+import com.example.api.payloads.requests.LoginRequest;
 import com.example.api.payloads.requests.SignupRequest;
+import com.example.api.payloads.responses.JwtResponse;
 import com.example.api.payloads.responses.MessageResponse;
 import com.example.api.repositories.RoleRepository;
 import com.example.api.repositories.UserRepository;
+import com.example.api.security.services.UserDetailsImplementation;
+import com.example.api.security.services.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins="*", maxAge=3600)
 @RestController
@@ -29,24 +44,10 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-
-//    @RequestMapping(value = "/register", method = RequestMethod.POST)
-//    public ResponseEntity<Object> registerUserPost (
-//            @RequestBody UserDTO registerPost
-//    ) {
-//        RegisterResult result = userService.registerNewUser(registerPost);
-//        if(result == RegisterResult.REGISTER_SUCCESS) {
-//            return new ResponseEntity<>("User has been saved", HttpStatus.CREATED);
-//        }
-//        switch(result) {
-//            case EMAIL_EXISTS:
-//                return new ResponseEntity<>("Email already exists", HttpStatus.CREATED);
-//            case REGISTER_SUCCESS:
-//                return new ResponseEntity<>("User has been saved", HttpStatus.CREATED);
-//            default:
-//                return new ResponseEntity<>("Registration Error", HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
 
 //    @RequestMapping(value = "/logIn" ,method = RequestMethod.POST)
 //    public ResponseEntity<Object> logInUserPost(@RequestBody UserDTO userDTO, HttpServletRequest req) {
@@ -65,6 +66,29 @@ public class UserController {
     public ResponseEntity<?> test(@RequestBody SignupRequest signupRequest){
         System.out.println("rantest");
         return ResponseEntity.ok(new MessageResponse("testok!"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
+        if(user.isEmpty()){
+            return new ResponseEntity<String>("Username does not exist", HttpStatus.UNAUTHORIZED);
+        } else {
+            if(!encoder.matches(loginRequest.getPassword(),user.get().getPassword())){
+                return new ResponseEntity<String>("Passwords do not match", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+        HttpCookie accessTokenCookie = jwtUtils.createCookieWithToken("accessToken", jwt, 10*60);
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString()).body("Log In Successful");
+//        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
 
     @PostMapping("/signup")
@@ -107,7 +131,6 @@ public class UserController {
         }
         user.setRoles(roles);
         userRepository.save(user);
-
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
