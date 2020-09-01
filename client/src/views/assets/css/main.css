@@ -1,11 +1,43 @@
 .alertMessage{
   padding-top:  15px;
 }
-
+/* ------------------------- */
+/* ------- NAVBAR --------- */
+/* ------------------------- */
+.navCustom {
+  margin-bottom: 15px;
+}
 .navbar-nav  {
   float: right;
 }
-
 .navbarItems {
-  display: inherit;
+  display: flex;
+}
+.navbar {
+  background-color:	#404040;
+  padding: 0.2rem 1rem !important;
+}
+
+#navbarTitle,
+.dropdown-toggle ,
+.nav-link,
+.nav-link:hover{
+  color:whitesmoke;
+}
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+#navbarUserIcon{
+  margin: 15px 10px 0px 10px;
+  color: whitesmoke;
+}
+
+@media (max-width: 768px) {
+  .navbar-expand-md .navbar-nav {
+    flex-direction: row;
+  }
+  .navbar-nav{
+    flex-direction: row !important;
+  }
 }

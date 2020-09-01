@@ -21,10 +21,8 @@ const LogIn = () => {
         data,
         )
         .then(res => {
-            // dispatch({type:"LOG_IN"});
             setErrorMessage(res.data);
             setHasError(false);
-            console.log(`Axios Call completed: ${JSON.stringify(res)}`);
             setIsLoggedIn(true);
             window.location = "/"
         })
