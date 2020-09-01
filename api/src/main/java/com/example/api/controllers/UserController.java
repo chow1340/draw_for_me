@@ -12,6 +12,7 @@ import com.example.api.repositories.RoleRepository;
 import com.example.api.repositories.UserRepository;
 import com.example.api.security.services.UserDetailsImplementation;
 import com.example.api.security.services.jwt.JwtUtils;
+import com.example.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +40,8 @@ import java.util.stream.Collectors;
 @RequestMapping(path="/api/auth")
 public class UserController {
 
-//    @Autowired
-//    private UserService userService;
-//
+    @Autowired
+    private UserService userService;
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
@@ -49,27 +53,8 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
-//    @RequestMapping(value = "/logIn" ,method = RequestMethod.POST)
-//    public ResponseEntity<Object> logInUserPost(@RequestBody UserDTO userDTO, HttpServletRequest req) {
-//        LogInResult result = userService.logInUser(userDTO, req);
-//        switch(result){
-//            case USER_DOES_NOT_EXIST:
-//                return new ResponseEntity<>("User does not exists", HttpStatus.CREATED);
-//            case PASSWORD_DO_NOT_MATCH:
-//                return new ResponseEntity<>("Passwords do not match", HttpStatus.CREATED);
-//            default:
-//                return new ResponseEntity<>("Log in successful", HttpStatus.CREATED);
-//
-//        }
-//    }
-    @PostMapping("/test")
-    public ResponseEntity<?> test(@RequestBody SignupRequest signupRequest){
-        System.out.println("rantest");
-        return ResponseEntity.ok(new MessageResponse("testok!"));
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response){
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
         if(user.isEmpty()){
             return new ResponseEntity<String>("Username does not exist", HttpStatus.UNAUTHORIZED);
@@ -83,13 +68,19 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
-        HttpCookie accessTokenCookie = jwtUtils.createCookieWithToken("accessToken", jwt, 10*60);
+
+        HttpCookie accessTokenCookie = jwtUtils.createHttpCookieWithToken("presence", jwt, 86400);
+        Cookie loginStateCookie = jwtUtils.createCookieWithToken("loggedIn", "true", 86400);
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        response.addCookie(loginStateCookie);
+        response.setHeader("Location", "/");
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString()).body("Log In Successful");
-//        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUserPost(@Valid @RequestBody SignupRequest signupRequest){
@@ -135,5 +126,14 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    @GetMapping("/isLoggedIn")
+    public ResponseEntity<?> isLoggedIn(Principal principal){
+        if(principal != null) {
+            return new ResponseEntity<String>("User is logged in", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<String>("User is not logged in", HttpStatus.UNAUTHORIZED);
+        }
 
+    }
 }

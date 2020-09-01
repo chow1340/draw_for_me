@@ -1,3 +1,11 @@
 .alertMessage{
   padding-top:  15px;
 }
+
+.navbar-nav  {
+  float: right;
+}
+
+.navbarItems {
+  display: inherit;
+}

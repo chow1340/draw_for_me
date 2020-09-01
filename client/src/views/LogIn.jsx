@@ -3,31 +3,34 @@ import React, {useState} from "react";
 import {Form, Label, Group, Text, Control, Button, Alert, Row} from 'react-bootstrap'
 import axios from 'axios'
 import { useForm } from "react-hook-form";
+import { connect, useSelector, useDispatch } from "react-redux";
+import {logIn} from "../redux/actions";
+import { loginType } from "../redux/actionTypes";
+import { Redirect } from "react-router-dom";
 
 
 const LogIn = () => {
+    const dispatch = useDispatch();
     const { handleSubmit, register, watch, errors } = useForm();
     const [errorMessage, setErrorMessage] = useState();
     const [hasError, setHasError] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const onSubmit = data => {
         axios.post(
         '/api/auth/login',
         data,
         )
         .then(res => {
+            // dispatch({type:"LOG_IN"});
             setErrorMessage(res.data);
             setHasError(false);
-            console.log(`Axios Call completed: ${JSON.stringify(res)}`)
+            console.log(`Axios Call completed: ${JSON.stringify(res)}`);
+            setIsLoggedIn(true);
+            window.location = "/"
         })
         .catch(err => {
-            // console.log(err.response);
-            setErrorMessage(err.response.data);
-            setHasError(true);
-            console.log(err.response.data);
-            console.log(`Axios Call Error: ${JSON.stringify(err.response)}`)
+            console.log(err.response);
         });
-
-        console.log(data);
     }
   
     function AlertMessage() {
@@ -49,7 +52,7 @@ const LogIn = () => {
   return (
     <div class="container">
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Form role="form">
+            {/* <Form role="form"> */}
             <Form.Group controlId="formBasicUsername">
                 <Form.Label>Username</Form.Label>
                 <Form.Control 
@@ -72,13 +75,31 @@ const LogIn = () => {
             <Button variant="primary" type="submit">
                 Log In
             </Button>
-            </Form>
+            {/* </Form> */}
         </form>
         <div className = "alertMessage">
             {AlertMessage()}
-        </div>      
+        </div>    
+        {/* <button onClick = {() => {
+          
+            dispatch({
+                type: loginType.LOG_OUT
+            })
+        }}>
+                log out
+        </button>
+        <button onClick = {() => {
+           
+            dispatch({
+                type: loginType.LOG_IN
+            })
+        }}>
+                log in
+        </button> */}
     </div>
     );
+    
 };
 
-export default LogIn
+
+export default LogIn;

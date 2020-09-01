@@ -10,10 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -51,10 +54,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     //Get JWT by removing Bearer prefix
     private String parseJwt(HttpServletRequest request){
-        String headerAuth = request.getHeader("Authorization");
-        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
-            return headerAuth.substring(7, headerAuth.length());
+        Cookie cookie = WebUtils.getCookie(request, "presence");
+//        String headerAuth = request.getHeader("Authorization");
+        if(cookie == null) {
+            return null;
         }
+        String headerAuth = cookie.getValue();
+        if(StringUtils.hasText(headerAuth)){
+            return headerAuth;
+        }
+//        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
+//            return headerAuth.substring(7, headerAuth.length());
+//        }
         return null;
     }
 }

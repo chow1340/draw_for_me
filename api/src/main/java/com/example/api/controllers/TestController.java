@@ -39,7 +39,6 @@ public class TestController {
     public UserDetails userDetailPost(){
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return userDetails;
     }
 }

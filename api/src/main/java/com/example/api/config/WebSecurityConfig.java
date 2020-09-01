@@ -5,6 +5,7 @@ import com.example.api.security.services.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +18,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
+import javax.servlet.http.Cookie;
 
 @Configuration
 @EnableWebSecurity //Allows spring to apply the class to global web security
@@ -62,7 +66,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated();
+//                .antMatchers(HttpMethod.GET, "/api/user/isLoggedIn").authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.logout(logout -> logout
+                .logoutUrl("/api/logout")
+                .deleteCookies("presence")
+                .deleteCookies("loggedIn")
+                .addLogoutHandler((request, response, auth) -> {
+                    for (Cookie cookie : request.getCookies()) {
+                        String cookieName = cookie.getName();
+                        Cookie cookieToDelete = new Cookie(cookieName, null);
+                        cookieToDelete.setMaxAge(0);
+                        response.addCookie(cookieToDelete);
+                    }
+                })
+                .logoutSuccessUrl("/")
+        );
     }
 }

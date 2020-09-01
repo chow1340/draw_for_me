@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import java.util.Date;
 
 @Component
@@ -55,11 +56,18 @@ public class JwtUtils {
         return false;
     }
 
-    public HttpCookie createCookieWithToken(String name, String token, int maxAge){
+    public HttpCookie createHttpCookieWithToken(String name, String token, int maxAge){
         return ResponseCookie.from(name, token)
                 .httpOnly(true)
                 .maxAge(maxAge)
                 .path("/")
                 .build();
+    }
+
+    public Cookie createCookieWithToken(String name, String value, int maxAge){
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
+        return cookie;
     }
 }
