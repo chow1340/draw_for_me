@@ -8,13 +8,12 @@ import {logIn} from "../redux/actions";
 import { loginType } from "../redux/actionTypes";
 import { Redirect } from "react-router-dom";
 
-
 const LogIn = () => {
     const dispatch = useDispatch();
     const { handleSubmit, register, watch, errors } = useForm();
     const [errorMessage, setErrorMessage] = useState();
     const [hasError, setHasError] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
     const onSubmit = data => {
         axios.post(
         '/api/auth/login',
@@ -23,11 +22,13 @@ const LogIn = () => {
         .then(res => {
             setErrorMessage(res.data);
             setHasError(false);
-            setIsLoggedIn(true);
-            window.location = "/"
+            // setIsLoggedIn(true);
+            window.location = "/user/" + data.username;
         })
         .catch(err => {
             console.log(err.response);
+            setErrorMessage(err.response.data);
+            setHasError(true);
         });
     }
   
@@ -48,7 +49,7 @@ const LogIn = () => {
     }
 
   return (
-    <div class="container">
+    <div id="logInComponent" class="container">
         <form onSubmit={handleSubmit(onSubmit)}>
             {/* <Form role="form"> */}
             <Form.Group controlId="formBasicUsername">

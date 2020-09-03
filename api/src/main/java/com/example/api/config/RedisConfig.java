@@ -23,11 +23,11 @@ public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
     @Value("${dev.redis.port}")
     private int devRedisPort;
 
-    @Value("${redis.hostname}")
-    private String redisHostName;
-
-    @Value("${redis.port}")
-    private int redisPort;
+//    @Value("${redis.hostname}")
+//    private String redisHostName;
+//
+//    @Value("${redis.port}")
+//    private int redisPort;
 
 //    @Value("${redis.prefix}")
 //    private String redisPrefix;

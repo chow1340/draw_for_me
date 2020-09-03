@@ -14,7 +14,6 @@ public class IndexController {
 
     @RequestMapping(value="/" , method=RequestMethod.GET)
     public void home(HttpServletRequest req){
-        System.out.println("ran");
         req.getSession().setAttribute("testSess", "testVal");
         List<String> msgs = (List<String>) req.getSession().getAttribute("testSess");
     }

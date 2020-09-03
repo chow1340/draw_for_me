@@ -41,3 +41,12 @@
     flex-direction: row !important;
   }
 }
+
+
+/* ------------------------- */
+/* ------- LOGIN --------- */
+/* ------------------------- */
+
+#logInComponent {
+  margin-top: 15px;
+}

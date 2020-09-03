@@ -1,12 +1,11 @@
 package com.example.api.controllers;
 
+import com.example.api.entities.Profile;
 import com.example.api.entities.Role;
 import com.example.api.entities.User;
-import com.example.api.enumerations.LogInResult;
 import com.example.api.enumerations.RoleEnum;
 import com.example.api.payloads.requests.LoginRequest;
 import com.example.api.payloads.requests.SignupRequest;
-import com.example.api.payloads.responses.JwtResponse;
 import com.example.api.payloads.responses.MessageResponse;
 import com.example.api.repositories.RoleRepository;
 import com.example.api.repositories.UserRepository;
@@ -22,9 +21,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -70,13 +69,12 @@ public class UserController {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
         HttpCookie accessTokenCookie = jwtUtils.createHttpCookieWithToken("presence", jwt, 86400);
-        Cookie loginStateCookie = jwtUtils.createCookieWithToken("loggedIn", "true", 86400);
+        Cookie loginStateCookie = jwtUtils.createCookieWithToken("c_user", userDetails.getUsername(), 86400);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         response.addCookie(loginStateCookie);
-        response.setHeader("Location", "/");
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString()).body("Log In Successful");
     }
@@ -86,12 +84,10 @@ public class UserController {
     public ResponseEntity<?> registerUserPost(@Valid @RequestBody SignupRequest signupRequest){
         //Verify Username and Email
         if(userRepository.existsByUsername(signupRequest.getUsername())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is taken"));
+            return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
         }
-        if(userRepository.existsByEmail(signupRequest.getEmail())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use"));
-        }
-        User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
+
+        User user = new User(signupRequest.getUsername(), encoder.encode(signupRequest.getPassword()));
 
         //Roles
         Set<String> strRoles = signupRequest.getRole();
@@ -120,6 +116,14 @@ public class UserController {
                 }
             });
         }
+
+        //Save a new profile to user
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profile.setEmail(signupRequest.getEmail());
+        user.setProfile(profile);
+
+        //Save to user
         user.setRoles(roles);
         userRepository.save(user);
 
@@ -134,6 +138,11 @@ public class UserController {
         else {
             return new ResponseEntity<String>("User is not logged in", HttpStatus.UNAUTHORIZED);
         }
+    }
 
+    @GetMapping("/getCurrentUser")
+    public UserDetails getCurrentUserDetails(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails;
     }
 }

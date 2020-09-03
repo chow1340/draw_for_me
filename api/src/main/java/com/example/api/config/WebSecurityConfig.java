@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout(logout -> logout
                 .logoutUrl("/api/logout")
                 .deleteCookies("presence")
-                .deleteCookies("loggedIn")
+                .deleteCookies("c_user")
                 .addLogoutHandler((request, response, auth) -> {
                     for (Cookie cookie : request.getCookies()) {
                         String cookieName = cookie.getName();

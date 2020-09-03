@@ -3,7 +3,7 @@
 
 
 // export const logIn = isLoggedIn => ({
-//     type: LOG_IN,
+//     type: "LOG_IN",
 //     payload: {
 //         isLoggedIn,
 //     }

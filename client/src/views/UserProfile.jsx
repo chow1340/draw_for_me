@@ -1,19 +1,40 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie'
-const UserProfile = () => {
-    const[message, setMessage] = useState();
-    axios.get('/api/test/context', {
-        headers:{
-            "Authorization" : Cookies.get("accessToken")
+import '../views/assets/css/userprofile.css';
+import SingleFileUploader from '../views/component/SingleFileUploader';
+import BannerImage from '../views/component/userProfile/BannerImage';
+const UserProfile = (props) => {
+    const[cUser, setcUser] = useState({});
+    const[file, setFile] = useState(); 
+    const[profilePic, setProfilePic] = useState(); 
+
+    useEffect(async () => {
+        async function getCurrentUser(){
+            const result = await axios(
+                "/api/profile/loggedInUserProfile",
+            )
+            .then(res => {
+                setcUser(res.data);
+                console.log(JSON.stringify(res.data));
+            })
+            .catch(err => console.log(err.response.data));
         }
-    })
-    .then(res => console.log(res))
-    .catch(err => console.log(err.response))
-    console.log(Cookies.get("accessToken"));
+        
+        getCurrentUser();
+      }, []);
+    
     return(
         <div>
-            {message}
+            <BannerImage
+                bannerImageUrl = {cUser.bannerImageUrl}
+            ></BannerImage>
+            <div class="container">
+                {JSON.stringify(cUser)}
+                <SingleFileUploader
+                api="/api/profile/uploadProfilePicture"
+                profileId = {cUser.id}
+                />
+            </div>
         </div>
     );
 }

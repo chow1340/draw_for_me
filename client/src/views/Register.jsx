@@ -14,16 +14,22 @@ const Register = () => {
       data,
     )
     .then(res => {
-        console.log(`Axios Call completed: ${JSON.stringify(res)}`)
+        axios.post(
+          '/api/auth/login',
+          {
+            username:data.username,
+            password:data.password
+          }
+        ).catch(
+          window.location="/error"
+        )
     })
     .catch(err => {
-      console.log(`Axios Call Error: ${JSON.stringify(err)}`)
+        console.log(err.response);
     });
-
     console.log(data);
   }
   
-
   return (
     <div class="container">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -46,6 +52,16 @@ const Register = () => {
             </Form.Text>
           </Form.Group>
 
+          <Form.Group controlId="username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control 
+            name="username" type="username" placeholder="Username"
+            ref={register({
+              required: "Required",
+              })}
+            />
+          </Form.Group>
+
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control 
@@ -53,8 +69,8 @@ const Register = () => {
             ref={register({
             })}
             />
-
           </Form.Group>
+
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control name="confirmPassword" type="password" placeholder="Confirm Password"
