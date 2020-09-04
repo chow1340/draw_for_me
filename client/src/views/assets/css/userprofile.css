@@ -1,4 +1,24 @@
 .bannerImage {
     height: 400px;
     width: 100%;
+    box-shadow: 5px 5px 15px;
+    border-radius: 8px;
+    position: relative;
+    background-position: center center, center top;
+    background-repeat: repeat, no-repeat; 
+}
+
+.bannerContainer{
+    padding:50px;
+}
+
+.editBannerButton {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    border:none;
+    box-shadow: 2px 2px 8px;
+    border-radius: 5px;
+    color: whitesmoke;
+    background-color:#404040
 }

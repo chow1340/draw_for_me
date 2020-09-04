@@ -25,15 +25,23 @@ const UserProfile = (props) => {
     
     return(
         <div>
-            <BannerImage
-                bannerImageUrl = {cUser.bannerImageUrl}
-            ></BannerImage>
+            <div className="bannerContainer">
+                <BannerImage
+                    bannerImageUrl = {cUser.bannerImageUrl}
+                ></BannerImage>
+            </div>
+            
             <div class="container">
-                {JSON.stringify(cUser)}
+                {/* {JSON.stringify(cUser)}
                 <SingleFileUploader
-                api="/api/profile/uploadProfilePicture"
-                profileId = {cUser.id}
+                    api="/api/profile/uploadProfilePicture"
+                    profileId = {cUser.id}
                 />
+
+                <SingleFileUploader
+                    api="/api/profile/uploadBannerImage"
+                    profileId = {cUser.id}
+                />   */}
             </div>
         </div>
     );
