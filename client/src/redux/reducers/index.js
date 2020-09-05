@@ -1,4 +1,6 @@
 import { combineReducers } from "redux";
 import logIn from "./logIn";
-
-export default combineReducers({logIn});
+import bannerImage from "../reducers/bannerImage";
+export default combineReducers({
+    bannerImage
+});

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cropper from "react-cropper";
+import axios from "axios";
 
-const defaultSrc =
-  "https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg";
-
-export const CropperComp: React.FC = () => {
-  const [image, setImage] = useState(defaultSrc);
-  const [cropData, setCropData] = useState("#");
-  const [cropper, setCropper] = useState<any>();
-  const onChange = (e: any) => {
+export const CropperComp = (props) => {
+  console.log(props.bannerImageUrl)
+  const defaultSrc = props.bannerImageUrl;
+  const [image, setImage] = useState("https://s3.ca-central-1.amazonaws.com/aws-cloud-storage-jeffrey-chow/1599170010345-33345827_10211958793194292_1805915090906513408_o.jpg");
+  const [cropData, setCropData] = useState("");
+  const [cropper, setCropper] = useState();
+  const onChange = (e) => {
     e.preventDefault();
     let files;
     if (e.dataTransfer) {
@@ -18,7 +18,7 @@ export const CropperComp: React.FC = () => {
     }
     const reader = new FileReader();
     reader.onload = () => {
-      setImage(reader.result as any);
+      setImage(reader.result);
     };
     reader.readAsDataURL(files[0]);
   };
@@ -26,6 +26,24 @@ export const CropperComp: React.FC = () => {
   const getCropData = () => {
     if (typeof cropper !== "undefined") {
       setCropData(cropper.getCroppedCanvas().toDataURL());
+      cropper.getCroppedCanvas().toBlob((blob) => {
+        let formData = new FormData();
+        formData.append('file', blob);
+        axios({
+          url: "/api/profile/uploadBannerImage",
+          method: "POST",
+          data: formData,
+          headers: {
+              'content-type' : 'multipart/form-data'
+          }
+      })
+      .then(res => {
+          console.log(res);
+      })
+      .catch(err => {
+          console.log(err.response.data);
+      })
+      })
     }
   };
 
@@ -40,8 +58,9 @@ export const CropperComp: React.FC = () => {
           style={{ height: 400, width: "100%" }}
           initialAspectRatio={1}
           preview=".img-preview"
-          src={image}
-          viewMode={1}
+          src={props.bannerImageUrl}
+          checkCrossOrigin={true}
+          viewMode={2}
           guides={true}
           minCropBoxHeight={10}
           minCropBoxWidth={10}
@@ -55,16 +74,16 @@ export const CropperComp: React.FC = () => {
         />
       </div>
       <div>
-        <div className="box" style={{ width: "50%", float: "right" }}>
+        {/* <div className="box" style={{ width: "50%", float: "right" }}>
           <h1>Preview</h1>
           <div
             className="img-preview"
             style={{ width: "100%", float: "left", height: "300px" }}
           />
-        </div>
+        </div> */}
         <div
           className="box"
-          style={{ width: "50%", float: "right", height: "300px" }}
+          style={{ width: "100%", height: "300px" }}
         >
           <h1>
             <span>Crop</span>

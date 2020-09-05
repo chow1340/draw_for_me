@@ -3,10 +3,14 @@ import axios from 'axios';
 import '../views/assets/css/userprofile.css';
 import SingleFileUploader from '../views/component/SingleFileUploader';
 import BannerImage from '../views/component/userProfile/BannerImage';
+import {useDispatch} from 'react-redux'
+import {SET_BANNER} from '../redux/actionTypes/profileTypes'
+
 const UserProfile = (props) => {
     const[cUser, setcUser] = useState({});
     const[file, setFile] = useState(); 
     const[profilePic, setProfilePic] = useState(); 
+    const dispatch = useDispatch();
 
     useEffect(async () => {
         async function getCurrentUser(){
@@ -15,6 +19,7 @@ const UserProfile = (props) => {
             )
             .then(res => {
                 setcUser(res.data);
+                dispatch({type : SET_BANNER , payload: res.data.bannerImageUrl})
                 console.log(JSON.stringify(res.data));
             })
             .catch(err => console.log(err.response.data));
@@ -32,7 +37,7 @@ const UserProfile = (props) => {
             </div>
             
             <div class="container">
-                {/* {JSON.stringify(cUser)}
+                {JSON.stringify(cUser)}
                 <SingleFileUploader
                     api="/api/profile/uploadProfilePicture"
                     profileId = {cUser.id}
@@ -41,7 +46,7 @@ const UserProfile = (props) => {
                 <SingleFileUploader
                     api="/api/profile/uploadBannerImage"
                     profileId = {cUser.id}
-                />   */}
+                />  
             </div>
         </div>
     );
