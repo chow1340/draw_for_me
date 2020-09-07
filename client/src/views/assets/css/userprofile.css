@@ -1,24 +1,54 @@
-.bannerImage {
-    height: 400px;
-    width: 100%;
+/* ------------------------- */
+/* ------- Banner Image --------- */
+/* ------------------------- */
+.bannerImageContainer {
     box-shadow: 5px 5px 15px;
     border-radius: 8px;
     position: relative;
-    background-position: center center, center top;
-    background-repeat: repeat, no-repeat; 
+    width: 100%;
+    height: 400px;
+    margin: auto;
+}
+.bannerImageContainer > img {
+    /* position: relative; */
+    width: 100%;
+    height: 100%;
+    z-index:-999;
 }
 
-.bannerContainer{
-    padding:50px;
-}
-
-.editBannerButton {
+#editBannerButton {
     position: absolute;
     right: 15px;
     bottom: 15px;
-    border:none;
-    box-shadow: 2px 2px 8px;
-    border-radius: 5px;
     color: whitesmoke;
-    background-color:#404040
+    background-color:#404040;
+    border: #404040;
+}
+
+#editBannerButton:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* ------------------------- */
+/* ------- Crop Menu --------- */
+/* ------------------------- */
+
+.modal-dialog{
+    max-width: 80%;
+}
+
+#modalHeader{
+    border-bottom: none;
+}
+
+.cropButtons{
+    width:80%;
+    margin: auto;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.cropButtons > div > button {
+    margin-left: 12px;
 }

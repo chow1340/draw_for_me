@@ -37,7 +37,6 @@ const UserProfile = (props) => {
             </div>
             
             <div class="container">
-                {JSON.stringify(cUser)}
                 <SingleFileUploader
                     api="/api/profile/uploadProfilePicture"
                     profileId = {cUser.id}

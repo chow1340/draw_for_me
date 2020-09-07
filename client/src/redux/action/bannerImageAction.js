@@ -1,8 +1,23 @@
-import {SET_BANNER} from '../actionTypes/profileTypes'
+import {SET_BANNER, CLOSE_CROP_MODAL, OPEN_CROP_MODAL} from '../actionTypes/profileTypes'
 
-export function setBannerImageUrl(bannerImageUrl){
+export function setBannerImageUrl(bannerImgUrl){
     return {
         type: SET_BANNER,
-        bannerImageUrl
+        bannerImgUrl
+    }
+}
+
+//MODAL
+export function closeCropModal(){
+    return {
+        type: CLOSE_CROP_MODAL,
+        ...state
+    }
+}
+
+export function openCropModal(){
+    return {
+        type: OPEN_CROP_MODAL,
+        ...state
     }
 }

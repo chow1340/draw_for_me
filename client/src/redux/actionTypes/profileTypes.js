@@ -1,1 +1,5 @@
 export const SET_BANNER = "SET_BANNER"
+
+//MODAL
+export const CLOSE_CROP_MODAL = "CLOSE_CROP_MODAL"
+export const OPEN_CROP_MODAL = "OPEN_CROP_MODAL"

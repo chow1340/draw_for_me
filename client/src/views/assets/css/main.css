@@ -1,6 +1,19 @@
 .alertMessage{
   padding-top:  15px;
 }
+
+/* ------------------------- */
+/* ------- BUTTONS --------- */
+/* ------------------------- */
+.btn-primary:hover {
+  background-color:#404040;
+  border-color: #404040;
+}
+
+.btn-primary{
+  background-color:#404040;
+  border-color: #404040 ;
+}
 /* ------------------------- */
 /* ------- NAVBAR --------- */
 /* ------------------------- */

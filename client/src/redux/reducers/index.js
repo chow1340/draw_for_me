@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import logIn from "./logIn";
-import bannerImage from "../reducers/bannerImage";
+import bannerImg from "./userProfile/bannerImg";
 export default combineReducers({
-    bannerImage
+    bannerImg
 });

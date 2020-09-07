@@ -1,34 +1,45 @@
 import React, { useState, useEffect } from "react";
+import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
+import {Button} from 'react-bootstrap'
+import {SET_BANNER} from '../../../redux/actionTypes/profileTypes'
 
 export const CropperComp = (props) => {
-  console.log(props.bannerImageUrl)
-  const defaultSrc = props.bannerImageUrl;
-  const [image, setImage] = useState("https://s3.ca-central-1.amazonaws.com/aws-cloud-storage-jeffrey-chow/1599170010345-33345827_10211958793194292_1805915090906513408_o.jpg");
+  const defaultSrc = props.bannerImgUrl;
+  const [image, setImage] = useState(defaultSrc);
   const [cropData, setCropData] = useState("");
   const [cropper, setCropper] = useState();
-  const onChange = (e) => {
-    e.preventDefault();
-    let files;
-    if (e.dataTransfer) {
-      files = e.dataTransfer.files;
-    } else if (e.target) {
-      files = e.target.files;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImage(reader.result);
-    };
-    reader.readAsDataURL(files[0]);
-  };
+  const [imageChanged, setImageChanged] = useState(false);
+  const dispatch = useDispatch();
+  
 
-  const getCropData = () => {
-    if (typeof cropper !== "undefined") {
-      setCropData(cropper.getCroppedCanvas().toDataURL());
+    const onChange = (e) => {
+      e.preventDefault();
+      let files;
+      if (e.dataTransfer) {
+        files = e.dataTransfer.files;
+      } else if (e.target) {
+        files = e.target.files;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+        console.log(reader.result);
+      };
+      reader.readAsDataURL(files[0]);
+    };
+
+
+    const saveNewImage = () => {
+      //Set redux state to new image
+      dispatch({type : SET_BANNER, payload: image})
+
       cropper.getCroppedCanvas().toBlob((blob) => {
+
         let formData = new FormData();
         formData.append('file', blob);
+        
         axios({
           url: "/api/profile/uploadBannerImage",
           method: "POST",
@@ -36,34 +47,38 @@ export const CropperComp = (props) => {
           headers: {
               'content-type' : 'multipart/form-data'
           }
-      })
-      .then(res => {
-          console.log(res);
-      })
-      .catch(err => {
-          console.log(err.response.data);
-      })
+        })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err.response.data);
+        })
       })
     }
-  };
+    const getCropData = () => {
+      if (typeof cropper !== "undefined") {
+        setImageChanged(true);
+        // setCropData(cropper.getCroppedCanvas().toDataURL('image/jpeg'));
+        setImage(cropper.getCroppedCanvas().toDataURL('image/jpeg'));
+      }
+    };
 
   return (
     <div>
       <div style={{ width: "100%" }}>
-        <input type="file" onChange={onChange} />
-        <button>Use default img</button>
-        <br />
-        <br />
         <Cropper
-          style={{ height: 400, width: "100%" }}
-          initialAspectRatio={1}
+          style={{ height: 400, width: "80%" , margin: "auto"}}
+          initialAspectRatio={24/9}
           preview=".img-preview"
-          src={props.bannerImageUrl}
+          src={image}
           checkCrossOrigin={true}
           viewMode={2}
           guides={true}
           minCropBoxHeight={10}
           minCropBoxWidth={10}
+          maxWidth={4096}
+          maxHeight={4096}
           background={false}
           responsive={true }
           autoCropArea={1}
@@ -73,28 +88,16 @@ export const CropperComp = (props) => {
           }}
         />
       </div>
-      <div>
-        {/* <div className="box" style={{ width: "50%", float: "right" }}>
-          <h1>Preview</h1>
-          <div
-            className="img-preview"
-            style={{ width: "100%", float: "left", height: "300px" }}
-          />
-        </div> */}
-        <div
-          className="box"
-          style={{ width: "100%", height: "300px" }}
-        >
-          <h1>
-            <span>Crop</span>
-            <button style={{ float: "right" }} onClick={getCropData}>
-              Crop Image
-            </button>
-          </h1>
-          <img style={{ width: "100%" }} src={cropData} alt="cropped" />
+        <div className="row cropButtons">
+          <div>
+            <input type="file" onChange={onChange}></input>
+          </div>
+          <div style={{float:"right"}}>
+            <Button onClick={getCropData}>Crop Image</Button>
+            <Button >Save</Button>
+          </div>
         </div>
-      </div>
-      <br style={{ clear: "both" }} />
+      <br />
     </div>
   );
 };
