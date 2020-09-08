@@ -3,15 +3,15 @@ import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
 import {Button} from 'react-bootstrap'
-import {SET_BANNER} from '../../../redux/actionTypes/profileTypes'
+import {SET_BANNER, CLOSE_CROP_MODAL, OPEN_CROP_MODAL} from '../../../redux/actionTypes/profileTypes'
 
 export const CropperComp = (props) => {
+  const dispatch = useDispatch();
   const defaultSrc = props.bannerImgUrl;
   const [image, setImage] = useState(defaultSrc);
   const [cropData, setCropData] = useState("");
   const [cropper, setCropper] = useState();
   const [imageChanged, setImageChanged] = useState(false);
-  const dispatch = useDispatch();
   
 
     const onChange = (e) => {
@@ -25,16 +25,21 @@ export const CropperComp = (props) => {
       const reader = new FileReader();
       reader.onload = () => {
         setImage(reader.result);
-        console.log(reader.result);
       };
       reader.readAsDataURL(files[0]);
+      setImageChanged(true);
     };
 
-
     const saveNewImage = () => {
+      //No changes made
+      if(imageChanged == false) {
+        dispatch({type: CLOSE_CROP_MODAL});
+        return;
+      }
+
       //Set redux state to new image
       dispatch({type : SET_BANNER, payload: image})
-
+      //Upload new image to db
       cropper.getCroppedCanvas().toBlob((blob) => {
 
         let formData = new FormData();
@@ -59,7 +64,6 @@ export const CropperComp = (props) => {
     const getCropData = () => {
       if (typeof cropper !== "undefined") {
         setImageChanged(true);
-        // setCropData(cropper.getCroppedCanvas().toDataURL('image/jpeg'));
         setImage(cropper.getCroppedCanvas().toDataURL('image/jpeg'));
       }
     };
@@ -93,8 +97,8 @@ export const CropperComp = (props) => {
             <input type="file" onChange={onChange}></input>
           </div>
           <div style={{float:"right"}}>
-            <Button onClick={getCropData}>Crop Image</Button>
-            <Button >Save</Button>
+            {image && <Button onClick={getCropData}>Crop Image</Button>}
+            <Button onClick={saveNewImage}>Save</Button>
           </div>
         </div>
       <br />

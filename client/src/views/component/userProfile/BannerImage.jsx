@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
-import '../../../views/assets/css/userprofile.css'
+import '../../../views/assets/css/banner.css'
 import "cropperjs/dist/cropper.css";
 import CropperComp from './CropperComp.jsx';
 import Lightbox from 'react-image-lightbox';
 import {Dropdown, Modal, Button} from 'react-bootstrap';
 import {useSelector, useDispatch} from 'react-redux';
 import {CLOSE_CROP_MODAL, OPEN_CROP_MODAL} from '../../../redux/actionTypes/profileTypes'
+import {FaEdit} from 'react-icons/fa'
 
 const BannerImage = (props) => {
     const dispatch = useDispatch();
@@ -19,22 +20,22 @@ const BannerImage = (props) => {
     const handleClose = () => dispatch({type : CLOSE_CROP_MODAL});
     const handleShow = () => dispatch({type : OPEN_CROP_MODAL});
 
-
-    var backgroundStyle = {
-        "background-color":"#DDDDDD"
-    };
-   
+    var backgroundStyle = {};
+    if(!bannerImgUrl){
+        backgroundStyle = {
+            "background-color":"#DDDDDD"
+        };    
+    }
 
     return (
         <div>
-            <div className="bannerImageContainer" >
-                <img className="bannerImg" onClick = {() => setIsOpen(true)}  src={bannerImgUrl}></img>
-                    <div className="profileBlock">
-                        
-                    </div>
-                    <Button onClick={handleShow} id = "editBannerButton">
-                        Edit Banner
-                    </Button>  
+            <div className="bannerImageContainer" style={backgroundStyle}>
+                {bannerImgUrl && 
+                    <img className="bannerImg" onClick = {() => setIsOpen(true)}  src={bannerImgUrl}></img>
+                }
+                <Button onClick={handleShow} id = "editBannerButton">
+                    <FaEdit></FaEdit>
+                </Button>  
             </div>
             <Modal show={showCropModal} onHide={handleClose}>
                 <Modal.Header id="modalHeader" closeButton></Modal.Header>

@@ -10,6 +10,9 @@ public class ProfileService {
     @Autowired
     ProfileRepository profileRepository;
 
+    @Autowired
+    AmazonClientService amazonClientService;
+
     public Profile getProfileByUserId(Long id){
         Profile profile = profileRepository.findByUserId(id);
         return profile;
@@ -23,6 +26,9 @@ public class ProfileService {
 
     public void updateBannerImageUrl(Long profileId, String bannerImageUrl){
         Profile profile = getProfileByUserId(profileId);
+        if(profile.getBannerImageUrl() != null) {
+            amazonClientService.deleteFileFromS3Bucket(profile.getBannerImageUrl());
+        }
         profile.setBannerImageUrl(bannerImageUrl);
         profileRepository.save(profile);
     }

@@ -1,8 +1,8 @@
 import React,{useState, useEffect} from 'react';
 import axios from 'axios';
-import '../views/assets/css/userprofile.css';
 import SingleFileUploader from '../views/component/SingleFileUploader';
 import BannerImage from '../views/component/userProfile/BannerImage';
+import ProfileBlock from '../views/component/userProfile/ProfileBlock'
 import {useDispatch} from 'react-redux'
 import {SET_BANNER} from '../redux/actionTypes/profileTypes'
 
@@ -29,11 +29,14 @@ const UserProfile = (props) => {
       }, []);
     
     return(
-        <div>
+        <div className="pageContainer">
             <div className="bannerContainer">
                 <BannerImage
                     bannerImageUrl = {cUser.bannerImageUrl}
-                ></BannerImage>
+                />
+                <ProfileBlock
+                    profileImgUrl = {cUser.profileImgUrl}
+                />
             </div>
             
             <div class="container">
