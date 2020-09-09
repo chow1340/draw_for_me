@@ -62,6 +62,20 @@ const Register = () => {
             />
           </Form.Group>
 
+          <Form.Group controlId="firstName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control 
+            name="firstName" type="firstName" placeholder="First Name"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="lastName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control 
+            name="lastName" type="lastName" placeholder="Last Name"
+            />
+          </Form.Group>
+
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control 

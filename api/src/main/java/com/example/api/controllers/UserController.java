@@ -120,6 +120,7 @@ public class UserController {
         //Save a new profile to user
         Profile profile = new Profile();
         profile.setUser(user);
+        profile.setUsername(signupRequest.getUsername());
         profile.setEmail(signupRequest.getEmail());
         user.setProfile(profile);
 

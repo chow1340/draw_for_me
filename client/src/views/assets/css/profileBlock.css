@@ -1,17 +1,65 @@
-.profileBlock{
-    box-shadow: 2px 2px 5px;
-    border-radius: 2px;
-    margin-top: -78px;
-    margin-left: 15%;
-    z-index: 10;
-    position: relative;
+.profileBlock {
+    position: absolute;
+    margin-left: 5%;
+    bottom: 60px;
 }
-
-.profileImage {
+.profileImageContainer {
+    z-index: 99;
     height: 150px;
     width: 150px;
-    border-radius: 50%;
     border: 3px solid white;
     border-color: white;
     background-color: black;
+    position: relative;
+}
+#editProfileButton{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    font-size: 14px;
+    background: none;
+    padding: 6px;
+    border: none;
+}
+
+#editProfileButton:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+.profileHeader{
+    /* position: absolute; */
+    left: 250px;
+    top:10px;
+}
+
+.profileBlockText{
+    margin-left: 20px;  
+}
+.whiteHeader{
+    color: whitesmoke;
+    text-shadow: 0 1px black;
+}
+
+#profileImage {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    z-index:-999;
+}
+
+#editBannerButton > button{
+    background-color: #404040;
+    border-color: #404040;
+}
+
+#editBannerButton > button:focus {
+    border-color: none;
+    box-shadow: none;
+}
+#editBannerButton > button:hover{
+    background-color: none !important;
+    border-color: none;
 }

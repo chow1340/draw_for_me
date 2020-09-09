@@ -3,16 +3,18 @@ import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
 import {Button} from 'react-bootstrap'
-import {SET_BANNER, CLOSE_CROP_MODAL, OPEN_CROP_MODAL} from '../../../redux/actionTypes/profileTypes'
+import {SET_BANNER, CLOSE_BANNER_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL,SET_PROFILE_IMAGE} from '../../../redux/actionTypes/profileTypes'
 
 export const CropperComp = (props) => {
   const dispatch = useDispatch();
-  const defaultSrc = props.bannerImgUrl;
+  const defaultSrc = props.imageUrl;
   const [image, setImage] = useState(defaultSrc);
   const [cropData, setCropData] = useState("");
   const [cropper, setCropper] = useState();
   const [imageChanged, setImageChanged] = useState(false);
-  
+  const handleCloseBanner = () => dispatch({type : CLOSE_BANNER_CROP_MODAL});
+  const handleProfileCropClose = () => dispatch({type : CLOSE_PROFILE_CROP_MODAL});
+
 
     const onChange = (e) => {
       e.preventDefault();
@@ -33,12 +35,21 @@ export const CropperComp = (props) => {
     const saveNewImage = () => {
       //No changes made
       if(imageChanged == false) {
-        dispatch({type: CLOSE_CROP_MODAL});
+        if(props.type == "banner") {
+          handleCloseBanner();
+        } else if(props.type == "profileImage"){
+          handleProfileCropClose();
+        }
+        dispatch({type: CLOSE_BANNER_CROP_MODAL});
         return;
       }
 
       //Set redux state to new image
-      dispatch({type : SET_BANNER, payload: image})
+      if(props.type == "banner") {
+        dispatch({type : SET_BANNER, payload: image})
+      } else if(props.type == "profileImage") {
+        dispatch({type : SET_PROFILE_IMAGE, payload: image})
+      }
       //Upload new image to db
       cropper.getCroppedCanvas().toBlob((blob) => {
 
@@ -46,7 +57,7 @@ export const CropperComp = (props) => {
         formData.append('file', blob);
         
         axios({
-          url: "/api/profile/uploadBannerImage",
+          url: props.apiUrl,
           method: "POST",
           data: formData,
           headers: {
@@ -73,7 +84,7 @@ export const CropperComp = (props) => {
       <div style={{ width: "100%" }}>
         <Cropper
           style={{ height: 400, width: "80%" , margin: "auto"}}
-          initialAspectRatio={24/9}
+          initialAspectRatio={1}
           preview=".img-preview"
           src={image}
           checkCrossOrigin={true}

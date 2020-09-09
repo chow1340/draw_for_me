@@ -9,7 +9,6 @@ import Cookie from 'js-cookie';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,UncontrolledDropdown,DropdownToggle,DropdownItem, DropdownMenu, NavbarText} from 'reactstrap';
 import { FaUser, FaBars } from 'react-icons/fa';
 import { useSelector, useDispatch } from "react-redux";
-import { loginType } from "../redux/actionTypes";
 
 
 function Menu(){

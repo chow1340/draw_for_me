@@ -4,8 +4,6 @@ import {Form, Label, Group, Text, Control, Button, Alert, Row} from 'react-boots
 import axios from 'axios'
 import { useForm } from "react-hook-form";
 import { connect, useSelector, useDispatch } from "react-redux";
-import {logIn} from "../redux/actions";
-import { loginType } from "../redux/actionTypes";
 import { Redirect } from "react-router-dom";
 
 const LogIn = () => {

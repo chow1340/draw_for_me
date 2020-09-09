@@ -20,6 +20,9 @@ public class ProfileService {
 
     public void updateProfileImageUrl(Long profileId, String profileImageUrl){
         Profile profile = getProfileByUserId(profileId);
+        if(profile.getProfileImageUrl() != null) {
+            amazonClientService.deleteFileFromS3Bucket(profile.getProfileImageUrl());
+        }
         profile.setProfileImageUrl(profileImageUrl);
         profileRepository.save(profile);
     }
