@@ -4,23 +4,48 @@ import Register from './Register';
 import Example from './Example';
 import LogIn from './LogIn'
 import UserProfile from './UserProfile';
-import {BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom'
+import {BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom';
+import axios from 'axios';
+import {SET_C_USER} from "../redux/actionTypes/user/currentUserTypes"
 import Cookie from 'js-cookie';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,UncontrolledDropdown,DropdownToggle,DropdownItem, DropdownMenu, NavbarText} from 'reactstrap';
 import { FaUser, FaBars } from 'react-icons/fa';
 import { useSelector, useDispatch } from "react-redux";
+import "../views/assets/css/menu.css"
 
 
-function Menu(){
+const Menu = (props) => {
+    const dispatch = useDispatch();
+    const [navProfileImage, setNavProfileImage] = useState();
+    useEffect(() => {
+        if(props.cUser) {
+          setNavProfileImage(props.cUser.profileImageUrl);
+        }
+      })
+    //Dropdown
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-    const [collapsed, setCollapsed] = useState(true);
-    const cUser = Cookie.get("c_user") 
+
+
+    const cUser = Cookie.get("c_user");
+    const navbarProfileImage = () => {
+        if(navProfileImage) {
+            return (
+                <a id="navbarProfileImageContainer" href={"/user/"+cUser}><img id="navbarProfileImage" src={navProfileImage}></img></a>
+            )
+        } else {
+            return (
+              <a href={"/user/"+cUser}><FaUser id="navbarUserIcon"></FaUser></a>
+            )
+        }
+    }
+    
     const logButton = () => {
         if(Cookie.get("c_user")) {
             return (
                 <span className="navbarItems">
-                    <a href={"/user/"+cUser}><FaUser id="navbarUserIcon"></FaUser></a>
+                    {navbarProfileImage()}
+                    {/* <a href={"/user/"+cUser}><FaUser id="navbarUserIcon"></FaUser></a> */}
                     <NavLink href="/api/logout">Log Out</NavLink>
                 </span>
             );
@@ -45,7 +70,6 @@ function Menu(){
         <Navbar  expand="md">
         <NavbarBrand id="navbarTitle" href="/">APP_TITLE</NavbarBrand>
         <NavbarToggler onClick={toggle} className="mr-2"/>
-        {/* <Collapse isOpen={isOpen} navbar> */}
           <Nav className="ml-auto" navbar>
             <NavItem>
                 {logButton()}
@@ -68,7 +92,6 @@ function Menu(){
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
-        {/* </Collapse> */}
       </Navbar>
         </div>
         <Route path="/profile"  exact component={UserProfile} />
@@ -78,9 +101,6 @@ function Menu(){
         <Route path="/user/:username" component = {UserProfile} />
         <Route
             path='/user/:username'
-            // render={(props) => (
-            //     <UserProfile {...props} cUser={cUser} />
-            // )}
         />
         </Router>
     );

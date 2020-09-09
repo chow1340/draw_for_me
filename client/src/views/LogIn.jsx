@@ -49,7 +49,6 @@ const LogIn = () => {
   return (
     <div id="logInComponent" class="container">
         <form onSubmit={handleSubmit(onSubmit)}>
-            {/* <Form role="form"> */}
             <Form.Group controlId="formBasicUsername">
                 <Form.Label>Username</Form.Label>
                 <Form.Control 
@@ -72,27 +71,10 @@ const LogIn = () => {
             <Button variant="primary" type="submit">
                 Log In
             </Button>
-            {/* </Form> */}
         </form>
         <div className = "alertMessage">
             {AlertMessage()}
         </div>    
-        {/* <button onClick = {() => {
-          
-            dispatch({
-                type: loginType.LOG_OUT
-            })
-        }}>
-                log out
-        </button>
-        <button onClick = {() => {
-           
-            dispatch({
-                type: loginType.LOG_IN
-            })
-        }}>
-                log in
-        </button> */}
     </div>
     );
     

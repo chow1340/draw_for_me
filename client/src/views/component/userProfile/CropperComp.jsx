@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
 import {Button} from 'react-bootstrap'
-import {SET_BANNER, CLOSE_BANNER_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL,SET_PROFILE_IMAGE} from '../../../redux/actionTypes/profileTypes'
+import {SET_BANNER, CLOSE_BANNER_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL,SET_PROFILE_IMAGE} from '../../../redux/actionTypes/user/profileTypes'
 
 export const CropperComp = (props) => {
   const dispatch = useDispatch();

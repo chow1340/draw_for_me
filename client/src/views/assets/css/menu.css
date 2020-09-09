@@ -1,0 +1,12 @@
+#navbarProfileImage{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+#navbarProfileImageContainer{
+    width: 30px;
+    height: 30px;
+    margin-top: 8px;
+}

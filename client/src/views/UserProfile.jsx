@@ -4,51 +4,66 @@ import SingleFileUploader from '../views/component/SingleFileUploader';
 import BannerImage from '../views/component/userProfile/BannerImage';
 import ProfileBlock from '../views/component/userProfile/ProfileBlock'
 import {useDispatch, useSelector} from 'react-redux'
-import {SET_BANNER, SET_PROFILE_IMAGE, SET_C_USER} from '../redux/actionTypes/profileTypes'
+import {SET_IS_OWNER_OF_PROFILE,SET_BANNER, SET_PROFILE_IMAGE, SET_C_PROFILE} from '../redux/actionTypes/user/profileTypes'
 
 const UserProfile = (props) => {
-    const[cUser, setcUser] = useState({});
-    const cUserRedux = useSelector(state => state.cUser);
-    const[file, setFile] = useState(); 
-    const[profilePic, setProfilePic] = useState(); 
+    const profileUsername = props.match.params.username;
+    const[cProfile, setcProfile] = useState({});
+    const cProfileRedux = useSelector(state => state.cProfile);
+    const cUserInfo = useSelector(state => state.cUserInfo);
+   
+
+    // const isOwnerOfProfile = false;
+    // if(cUserInfo.id == cProfile.id) {
+    //     isOwnerOfProfile = true;
+    // }
     const dispatch = useDispatch();
     useEffect(async () => {
-        async function getCurrentUser(){
-            if(cUserRedux === undefined) {
-                const result = await axios(
-                    "/api/profile/loggedInUserProfile",
+        async function getCurrentProfile(){
+            if(cProfileRedux === undefined) {
+                await axios(
+                    "/api/profile/getProfileByUsername",
+                    {
+                        params: {
+                            username: profileUsername
+                        }
+                    }
                 )
                 .then(res => {
-                    setcUser(res.data);
-                    dispatch({type : SET_C_USER, payload: res.data});
+                    setcProfile(res.data);
+                    dispatch({type : SET_C_PROFILE, payload: res.data});
                     dispatch({type : SET_BANNER , payload: res.data.bannerImageUrl});
                     dispatch({type : SET_PROFILE_IMAGE, payload : res.data.profileImageUrl});
                     console.log(JSON.stringify(res.data));
                 })
                 .catch(err => console.log(err.response.data));
             }
-           
         }
+
         
-        getCurrentUser();
+        getCurrentProfile();
       }, []);
+    if(cUserInfo.cUser && cProfile.id == cUserInfo.cUser.id) {
+        console.log("ran");
+        dispatch({type : SET_IS_OWNER_OF_PROFILE, payload: true});
+    }
     return(
         <div className="pageContainer">
             <div className="bannerContainer">
                 <BannerImage
-                    bannerImageUrl = {cUser.bannerImageUrl}
+                    bannerImageUrl = {cProfile.bannerImageUrl}
                 />
             </div>
             
             <div class="container">
                 <SingleFileUploader
                     api="/api/profile/uploadProfilePicture"
-                    profileId = {cUser.id}
+                    profileId = {cProfile.id}
                 />
 
                 <SingleFileUploader
                     api="/api/profile/uploadBannerImage"
-                    profileId = {cUser.id}
+                    profileId = {cProfile.id}
                 />  
             </div>
         </div>

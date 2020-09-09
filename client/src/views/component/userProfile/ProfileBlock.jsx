@@ -3,7 +3,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import '../../../views/assets/css/profileBlock.css'
 import {Button, Modal} from 'react-bootstrap';
 import {FaEdit} from 'react-icons/fa';
-import {OPEN_PROFILE_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL} from '../../../redux/actionTypes/profileTypes'
+import {OPEN_PROFILE_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL} from '../../../redux/actionTypes/user/profileTypes'
 import CropperComp from './CropperComp';
 
 
@@ -14,7 +14,7 @@ const ProfileBlock = (props) => {
     const showProfileCropModal = useSelector(state => state.profileInfo.cropProfileState);
     const handleProfileCropClose = () => dispatch({type : CLOSE_PROFILE_CROP_MODAL});
     const profileImageUrl = useSelector(state => state.profileInfo.profileImageUrl);
-    const userName = useSelector(state => state.profileInfo.cUser.username);
+    const userName = useSelector(state => state.profileInfo.cProfile.username);
     
     return (
         <div className="row profileBlock">

@@ -1,19 +1,26 @@
-import {SET_C_USER, SET_BANNER, SET_PROFILE_IMAGE, OPEN_PROFILE_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL, OPEN_BANNER_CROP_MODAL, CLOSE_BANNER_CROP_MODAL} from '../../actionTypes/profileTypes'
+import {SET_IS_OWNER_OF_PROFILE, SET_C_PROFILE, SET_BANNER, SET_PROFILE_IMAGE, OPEN_PROFILE_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL, OPEN_BANNER_CROP_MODAL, CLOSE_BANNER_CROP_MODAL} from '../../actionTypes/user/profileTypes'
 
 const initialState = {
-    cUser : {},
+    cProfile : {},
     bannerImageUrl : "",
     cropModalState : false,
     cropProfileState : false,
     profileImageUrl : "",
+    isOwnerOfProfile : false,
 }
 
 export default function(state = initialState, action) {
     switch(action.type){
-        case SET_C_USER : {
+        case SET_IS_OWNER_OF_PROFILE : {
             return {
                 ...state,
-                cUser : action.payload
+                isOwnerOfProfile : action.payload
+            }
+        }
+        case SET_C_PROFILE : {
+            return {
+                ...state,
+                cProfile : action.payload
             }
         }
         case SET_BANNER : {

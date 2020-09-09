@@ -1,9 +1,9 @@
-import {SET_C_USER, SET_BANNER, SET_PROFILE_IMAGE, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL, SET_PROFILE_IMAGE} from '../actionTypes/profileTypes'
+import {SET_C_PROFILE, SET_BANNER, SET_PROFILE_IMAGE, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL, SET_PROFILE_IMAGE} from '../../actionTypes/user/profileTypes'
 
-export function setCurrentUser(){
+export function setCurrentProfile(){
     return {
-        type: SET_C_USER,
-        cUser
+        type: SET_C_PROFILE,
+        cProfile
     }
 }
 
