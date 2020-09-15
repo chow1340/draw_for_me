@@ -1,3 +1,4 @@
+
 .profileBlock {
     position: absolute;
     margin-left: 5%;
@@ -5,8 +6,8 @@
 }
 .profileImageContainer {
     z-index: 99;
-    height: 150px;
-    width: 150px;
+    height: 125px;
+    width: 125px;
     border: 3px solid white;
     border-color: white;
     background-color: black;
@@ -30,7 +31,6 @@
 }
 
 .profileHeader{
-    /* position: absolute; */
     left: 250px;
     top:10px;
 }
@@ -50,16 +50,5 @@
     z-index:-999;
 }
 
-#editBannerButton > button{
-    background-color: #404040;
-    border-color: #404040;
-}
 
-#editBannerButton > button:focus {
-    border-color: none;
-    box-shadow: none;
-}
-#editBannerButton > button:hover{
-    background-color: none !important;
-    border-color: none;
-}
+

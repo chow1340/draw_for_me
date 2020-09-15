@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Profile findByUserId(Long userId);
+
+    Profile findByUsername(String username);
 }

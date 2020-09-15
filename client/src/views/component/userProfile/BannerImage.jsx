@@ -1,20 +1,22 @@
 import React, {useState} from 'react'
-import '../../../views/assets/css/banner.css'
+import '../../../views/assets/css/userProfile/banner.css'
 import "cropperjs/dist/cropper.css";
 import CropperComp from './CropperComp.jsx';
 import Lightbox from 'react-image-lightbox';
 import {Dropdown, Modal, Button} from 'react-bootstrap';
 import {useSelector, useDispatch} from 'react-redux';
-import {CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL, OPEN_PROFILE_CROP_MODAL} from '../../../redux/actionTypes/user/profileTypes'
+import {OPEN_PROFILE_INFO_MODAL, CLOSE_PROFILE_INFO_MODAL, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL, OPEN_PROFILE_CROP_MODAL} from '../../../redux/actionTypes/user/profileTypes'
 import {FaEdit} from 'react-icons/fa'
 import ProfileBlock from './ProfileBlock.jsx';
+import $ from 'jquery';
 const BannerImage = (props) => {
     const dispatch = useDispatch();
-    
     const isOwnerOfProfile = useSelector(state => state.profileInfo.isOwnerOfProfile);
 
+    const bannerWidth = document.getElementsByClassName("bannerImgContainer").offsetWidth
+
     //Lightbox
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenZoomedBanner, setIsOpenZoomedBanner] = useState(false);
     const bannerImageUrl = useSelector(state => state.profileInfo.bannerImageUrl);
    
     //Modal for banner
@@ -22,27 +24,33 @@ const BannerImage = (props) => {
     const handleCloseBanner = () => dispatch({type : CLOSE_BANNER_CROP_MODAL});
     const handleShowBanner = () => dispatch({type : OPEN_BANNER_CROP_MODAL});
 
-    //Modal for profile
+    //Modal for profile Crop
     const showProfileCropModal = useSelector(state => state.profileInfo.cropProfileState);
     const handleProfileCropOpen = () => dispatch({type : OPEN_PROFILE_CROP_MODAL});
 
+    //Modal for profile Info
+    const handleProfileInfoModalOpen = () => dispatch({type: OPEN_PROFILE_INFO_MODAL});
 
     var backgroundStyle = {};
-    if(!bannerImageUrl){
+    if(bannerImageUrl){
         backgroundStyle = {
-            "background-color":"#DDDDDD"
+            background : `url(${bannerImageUrl})`,
+            backgroundSize: "cover",
+            // background: "no-repeat center center fixed"
         };    
+    } else {
+        backgroundStyle = {
+            "background-color":"#DDDDDD",
+        }
     }
 
     return (
-        <div>
-            <div className="bannerImageContainer" style={backgroundStyle}>
-                {bannerImageUrl && 
-                    <img className="bannerImageon" onClick = {() => setIsOpen(true)}  src={bannerImageUrl}></img>
-                }
+            <div className="bannerImageContainer" 
+            // onClick = {() => setIsOpenZoomedBanner(true)} 
+            style={backgroundStyle}>
                 <ProfileBlock/>
                {isOwnerOfProfile && 
-                <Dropdown id="editBannerButton">
+                <Dropdown onClick = {(event) =>event.stopPropagation()} id="editBannerButton">
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
                     <FaEdit></FaEdit>
                 </Dropdown.Toggle>
@@ -50,35 +58,23 @@ const BannerImage = (props) => {
                 <Dropdown.Menu>
                     <Dropdown.Item onClick={handleShowBanner}>Edit Banner Image</Dropdown.Item>
                     <Dropdown.Item onClick={handleProfileCropOpen}>Edit Profile Image</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Edit Profile Information</Dropdown.Item>
+                    <Dropdown.Item onClick={handleProfileInfoModalOpen}>Edit Profile Information</Dropdown.Item>
                 </Dropdown.Menu>
                 </Dropdown>
                } 
-               
-            </div>
-            <Modal show={showCropModal} onHide={handleCloseBanner}>
-                <Modal.Header id="modalHeader" closeButton></Modal.Header>
-                <Modal.Body> 
-                    <CropperComp
-                        imageUrl = {bannerImageUrl}
-                        apiUrl = "/api/profile/uploadBannerImage"
-                        type = "banner"
-                    ></CropperComp>
-                </Modal.Body>
-            </Modal>
             <div>
-                {isOpen && (
+                {isOpenZoomedBanner && showCropModal==false && showProfileCropModal==false &&   (
                     <Lightbox
                         mainSrc={bannerImageUrl}
-                        onCloseRequest={()=>setIsOpen(false)}
+                        onCloseRequest={()=>setIsOpenZoomedBanner(false)}
                     >
                     </Lightbox>
                 )}
             </div>
-           
+            </div>
             
-        </div>
     )
 }
+
 
 export default BannerImage;

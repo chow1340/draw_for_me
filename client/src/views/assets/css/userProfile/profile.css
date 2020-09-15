@@ -1,0 +1,16 @@
+/* ------------------------- */
+/* ------- TABS --------- */
+/* ------------------------- */
+.MuiAppBar-colorPrimary {
+    color: #fff;
+    background-color: black;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  .MuiTabs-flexContainer {
+    display: flex;
+    justify-content: center;
+  }

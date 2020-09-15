@@ -1,17 +1,23 @@
 .pageContainer{
-  background-color: whitesmoke;
+  background-color: black;
+  color: whitesmoke;
 }
+
+.pageBodyContainer{
+  min-height: 500px;
+}
+
 /* ------------------------- */
 /* ------- BUTTONS --------- */
 /* ------------------------- */
 .btn-primary:hover {
-  background-color:#404040;
-  border-color: #404040;
+  background-color:black;
+  border-color: black;
 }
 
 .btn-primary{
-  background-color:#404040;
-  border-color: #404040 ;
+  background-color:black;
+  border-color: black ;
 }
 /* ------------------------- */
 /* ------- NAVBAR --------- */
@@ -26,7 +32,7 @@
   display: flex;
 }
 .navbar {
-  background-color:	#404040;
+  background-color:	black;
   padding: 0.2rem 1rem !important;
 }
 
@@ -53,6 +59,7 @@
     flex-direction: row !important;
   }
 }
+
 
 
 /* ------------------------- */

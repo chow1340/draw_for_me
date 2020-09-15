@@ -17,25 +17,47 @@ import "../views/assets/css/menu.css"
 const Menu = (props) => {
     const dispatch = useDispatch();
     const [navProfileImage, setNavProfileImage] = useState();
+    const cUserInfo = useSelector(state => state.cUserInfo.cUser);
+    const [cUser, setCUser] = useState();
     useEffect(() => {
-        if(props.cUser) {
-          setNavProfileImage(props.cUser.profileImageUrl);
+        if(cUserInfo) {
+          setNavProfileImage(cUserInfo.profileImageUrl);
         }
-      })
+      });
+      
+
+      useEffect(async () => {
+        async function getCurrentUser(){
+            const result = await axios(
+                "/api/profile/loggedInUserProfile"
+            )
+            .then(res => {
+                console.log(res.data);
+                const userData = res.data
+                setCUser(userData);
+                dispatch({type: SET_C_USER, payload: userData});
+                console.log(JSON.stringify(userData));
+            })
+            .catch(err => console.log(err));
+        }
+        
+        getCurrentUser();
+      }, []);
+    
     //Dropdown
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-
-
-    const cUser = Cookie.get("c_user");
+    
+    const cUserUsername = cUser ? cUser.username : "";
+    // const cUser = Cookie.get("c_user");
     const navbarProfileImage = () => {
         if(navProfileImage) {
             return (
-                <a id="navbarProfileImageContainer" href={"/user/"+cUser}><img id="navbarProfileImage" src={navProfileImage}></img></a>
+                <a id="navbarProfileImageContainer" href={"/user/"+ cUserUsername}><img id="navbarProfileImage" src={navProfileImage}></img></a>
             )
         } else {
             return (
-              <a href={"/user/"+cUser}><FaUser id="navbarUserIcon"></FaUser></a>
+              <a href={"/user/" + cUserUsername}><FaUser id="navbarUserIcon"></FaUser></a>
             )
         }
     }

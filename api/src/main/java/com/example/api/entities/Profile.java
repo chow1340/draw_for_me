@@ -27,8 +27,8 @@ public class Profile{
     @Column(name="username")
     private String username;
 
-    @Column(name="bio")
-    private String bio;
+    @Column(name="description")
+    private String description;
 
     @Column(name="profile_image_url")
     private String profileImageUrl;
@@ -39,10 +39,11 @@ public class Profile{
     public Profile() {
 
     }
-    public Profile(Long id, User user, String username, @Email String email, String profileImageUrl) {
+    public Profile(Long id, User user, String username, String description, @Email String email, String profileImageUrl) {
         this.id = id;
         this.user = user;
         this.username = username;
+        this.description = description;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
     }
@@ -61,6 +62,14 @@ public class Profile{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setUser(User user) {

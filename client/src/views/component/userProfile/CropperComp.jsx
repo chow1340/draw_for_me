@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
@@ -9,11 +9,10 @@ export const CropperComp = (props) => {
   const dispatch = useDispatch();
   const defaultSrc = props.imageUrl;
   const [image, setImage] = useState(defaultSrc);
-  const [cropData, setCropData] = useState("");
   const [cropper, setCropper] = useState();
   const [imageChanged, setImageChanged] = useState(false);
-  const handleCloseBanner = () => dispatch({type : CLOSE_BANNER_CROP_MODAL});
-  const handleProfileCropClose = () => dispatch({type : CLOSE_PROFILE_CROP_MODAL});
+  const handleCloseBanner = (event) => {dispatch({type : CLOSE_BANNER_CROP_MODAL})};
+  const handleProfileCropClose = (event) => {dispatch({type : CLOSE_PROFILE_CROP_MODAL}) };
 
 
     const onChange = (e) => {
@@ -50,12 +49,13 @@ export const CropperComp = (props) => {
       } else if(props.type == "profileImage") {
         dispatch({type : SET_PROFILE_IMAGE, payload: image})
       }
-      //Upload new image to db
+      // //Upload new image to db
       cropper.getCroppedCanvas().toBlob((blob) => {
 
         let formData = new FormData();
         formData.append('file', blob);
-        
+        console.log(cropper.getData());
+
         axios({
           url: props.apiUrl,
           method: "POST",
@@ -66,11 +66,33 @@ export const CropperComp = (props) => {
         })
         .then(res => {
             console.log(res);
+            console.log(formData.get("file"));
+
         })
         .catch(err => {
             console.log(err.response.data);
         })
-      })
+      }, 'image/jpeg')
+
+      // //Upload new image to db
+      //   let file = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+      //   let formData = new FormData();
+      //   formData.append('file', file);
+      //   console.log(formData);
+      //   axios({
+      //     url: props.apiUrl,
+      //     method: "POST",
+      //     data: formData,
+      //     headers: {
+      //         'content-type' : 'multipart/form-data'
+      //     }
+      //   })
+      //   .then(res => {
+      //       console.log(res);
+      //   })
+      //   .catch(err => {
+      //       console.log(err.response.data);
+      //   })
     }
     const getCropData = () => {
       if (typeof cropper !== "undefined") {
@@ -83,8 +105,8 @@ export const CropperComp = (props) => {
     <div>
       <div style={{ width: "100%" }}>
         <Cropper
-          style={{ height: 400, width: "80%" , margin: "auto"}}
-          initialAspectRatio={1}
+          style={{ height: 400, width: "100%" , margin: "auto"}}
+          aspectRatio = {props.aspectRatio}
           preview=".img-preview"
           src={image}
           checkCrossOrigin={true}
@@ -95,8 +117,8 @@ export const CropperComp = (props) => {
           maxWidth={4096}
           maxHeight={4096}
           background={false}
-          responsive={true }
-          autoCropArea={1}
+          responsive={true}
+          autoCropArea={100}
           checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
           onInitialized={(instance) => {
             setCropper(instance);

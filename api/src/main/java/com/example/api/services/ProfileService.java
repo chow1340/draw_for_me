@@ -1,8 +1,11 @@
 package com.example.api.services;
 
 import com.example.api.entities.Profile;
+import com.example.api.payloads.requests.UpdateProfileRequest;
 import com.example.api.repositories.ProfileRepository;
+import com.example.api.security.services.UserDetailsImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +18,11 @@ public class ProfileService {
 
     public Profile getProfileByUserId(Long id){
         Profile profile = profileRepository.findByUserId(id);
+        return profile;
+    }
+
+    public Profile getProfileByUsername(String username){
+        Profile profile = profileRepository.findByUsername(username);
         return profile;
     }
 
@@ -33,6 +41,14 @@ public class ProfileService {
             amazonClientService.deleteFileFromS3Bucket(profile.getBannerImageUrl());
         }
         profile.setBannerImageUrl(bannerImageUrl);
+        profileRepository.save(profile);
+    }
+
+    public void saveUpdateProfileRequest(UpdateProfileRequest request){
+        UserDetailsImplementation userDetails = (UserDetailsImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Profile profile = getProfileByUserId(userDetails.getId());
+
+        profile.setDescription(request.getDescription());
         profileRepository.save(profile);
     }
 }
