@@ -1,7 +1,7 @@
 package com.example.api.services;
 
 import com.example.api.entities.Profile;
-import com.example.api.payloads.requests.UpdateProfileRequest;
+import com.example.api.payloads.profile.requests.UpdateProfileRequest;
 import com.example.api.repositories.ProfileRepository;
 import com.example.api.security.services.UserDetailsImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +51,5 @@ public class ProfileService {
         profile.setDescription(request.getDescription());
         profileRepository.save(profile);
     }
+
 }

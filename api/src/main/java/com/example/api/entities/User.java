@@ -1,11 +1,10 @@
 package com.example.api.entities;
-import com.example.api.enumerations.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,6 +37,7 @@ public class User {
 
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
     private Profile profile;
+
 
     public User(){
     }

@@ -26,17 +26,15 @@ const Menu = (props) => {
       });
       
 
-      useEffect(async () => {
+      useEffect(() => {
         async function getCurrentUser(){
             const result = await axios(
                 "/api/profile/loggedInUserProfile"
             )
             .then(res => {
-                console.log(res.data);
                 const userData = res.data
                 setCUser(userData);
                 dispatch({type: SET_C_USER, payload: userData});
-                console.log(JSON.stringify(userData));
             })
             .catch(err => console.log(err));
         }
@@ -89,7 +87,7 @@ const Menu = (props) => {
         <Router>
         <div>
        
-        <Navbar  expand="md">
+        <Navbar fixed="top" expand="md">
         <NavbarBrand id="navbarTitle" href="/">APP_TITLE</NavbarBrand>
         <NavbarToggler onClick={toggle} className="mr-2"/>
           <Nav className="ml-auto" navbar>

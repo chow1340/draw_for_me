@@ -20,7 +20,8 @@ const ProfileCropModal = () => {
                     imageUrl = {profileImageUrl}
                     apiUrl = "/api/profile/uploadProfilePicture"
                     type = "profileImage"
-                    aspectRatio = {1}
+                    aspectRatioWidth = {1}
+                    aspectRatioHeight = {1}
                 ></CropperComp>
             </Modal.Body>
         </Modal> 

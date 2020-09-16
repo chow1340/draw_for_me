@@ -4,9 +4,9 @@ import com.example.api.entities.Profile;
 import com.example.api.entities.Role;
 import com.example.api.entities.User;
 import com.example.api.enumerations.RoleEnum;
-import com.example.api.payloads.requests.LoginRequest;
-import com.example.api.payloads.requests.SignupRequest;
-import com.example.api.payloads.responses.MessageResponse;
+import com.example.api.payloads.user.requests.LoginRequest;
+import com.example.api.payloads.user.requests.SignupRequest;
+import com.example.api.payloads.user.responses.MessageResponse;
 import com.example.api.repositories.RoleRepository;
 import com.example.api.repositories.UserRepository;
 import com.example.api.security.services.UserDetailsImplementation;
@@ -69,7 +69,7 @@ public class UserController {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
         HttpCookie accessTokenCookie = jwtUtils.createHttpCookieWithToken("presence", jwt, 86400);
-        Cookie loginStateCookie = jwtUtils.createCookieWithToken("c_user", userDetails.getUsername(), 86400);
+        Cookie loginStateCookie = jwtUtils.createCookieWithToken("c_user", userDetails.getId().toString(), 86400);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())

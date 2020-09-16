@@ -15,8 +15,7 @@ import GalleryBlock from './component/userProfile/GalleryBlock';
 
 function TabPanel(props) {
 
-    const { children, value, index, ...other } = props;
-  
+    const { children, value, index, cProfile, ...other } = props;
     return (
       <div
         role="tabpanel"
@@ -26,7 +25,9 @@ function TabPanel(props) {
         {...other}
       >
         {value === 0 && (
-          <GalleryBlock></GalleryBlock>
+          <GalleryBlock
+            cProfile = {props.cProfile}
+          ></GalleryBlock>
         )}
       </div>
     );
@@ -51,7 +52,8 @@ const UserProfile = (props) => {
       }
 
     const dispatch = useDispatch();
-    useEffect(async () => {
+
+    useEffect(() => {
         async function getCurrentProfile(){
             if(cProfileRedux === undefined) {
                 await axios(
@@ -94,14 +96,14 @@ const UserProfile = (props) => {
                         <Tab label="Item Three" {...a11yProps(2)} />
                     </Tabs>
                 </AppBar>
-                <TabPanel value={value} index={0}>
-                  Item One sss
+                <TabPanel value={value} index={0} cProfile={cProfile}>
+          
                 </TabPanel>
+
                 <TabPanel value={value} index={1}>
-                  Item Two
                 </TabPanel>
+
                 <TabPanel value={value} index={2}>
-                  Item Three
                 </TabPanel>
 
             </div>
@@ -109,6 +111,7 @@ const UserProfile = (props) => {
             <ProfileEditorModal/>
             <ProfileCropModal/>
             <GalleryBlockUploadModal />
+          
         </div>
     );
 }

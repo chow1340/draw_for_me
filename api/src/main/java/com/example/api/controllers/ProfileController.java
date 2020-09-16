@@ -1,12 +1,11 @@
 package com.example.api.controllers;
 
 import com.example.api.entities.Profile;
-import com.example.api.payloads.requests.UpdateProfileRequest;
+import com.example.api.payloads.profile.requests.UpdateProfileRequest;
 import com.example.api.security.services.UserDetailsImplementation;
 import com.example.api.services.AmazonClientService;
 import com.example.api.services.ProfileService;
 import com.example.api.services.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -77,4 +76,7 @@ public class ProfileController {
         profileService.saveUpdateProfileRequest(request);
         return new ResponseEntity<String>("Profile has been updated", HttpStatus.OK);
     }
+
+
+
 }

@@ -13,7 +13,7 @@ const BannerImage = (props) => {
     const dispatch = useDispatch();
     const isOwnerOfProfile = useSelector(state => state.profileInfo.isOwnerOfProfile);
 
-    const bannerWidth = document.getElementsByClassName("bannerImgContainer").offsetWidth
+    // const bannerWidth = document.getElementsByClassName("bannerImgContainer").offsetWidth
 
     //Lightbox
     const [isOpenZoomedBanner, setIsOpenZoomedBanner] = useState(false);
@@ -34,9 +34,7 @@ const BannerImage = (props) => {
     var backgroundStyle = {};
     if(bannerImageUrl){
         backgroundStyle = {
-            background : `url(${bannerImageUrl})`,
-            backgroundSize: "cover",
-            // background: "no-repeat center center fixed"
+            backgroundImage: `url(${bannerImageUrl})`,
         };    
     } else {
         backgroundStyle = {
@@ -44,10 +42,27 @@ const BannerImage = (props) => {
         }
     }
 
+    $(window).scroll(function() {
+        var scrolledY = $(window).scrollTop();
+        $('.bannerImageContainer').css('background-position', 'left ' + ((scrolledY)) + 'px');
+      });
+
+      $(document).ready(function(){
+        var gradient =100 - ($(this).scrollTop() / 500)*60;
+        $(".bannerImageContainerOverlay").css({
+            'background':'-webkit-linear-gradient(top,rgba(255,153,153,0) 0%, rgba(255,153,153,0) ' + gradient + '%,rgba(0,0,0,1) 100%)',        
+        });
+        $(document).scroll(function() {
+            gradient =100 - ($(this).scrollTop() / 500)*60;
+            $(".bannerImageContainerOverlay").css({
+                'background':'-webkit-linear-gradient(top,rgba(255,153,153,0) 0%, rgba(255,153,153,0) ' + gradient + '%,rgba(0,0,0,1) 100%)',        
+            });
+        });
+    });
     return (
             <div className="bannerImageContainer" 
-            // onClick = {() => setIsOpenZoomedBanner(true)} 
             style={backgroundStyle}>
+                <div className="bannerImageContainerOverlay"></div>
                 <ProfileBlock/>
                {isOwnerOfProfile && 
                 <Dropdown onClick = {(event) =>event.stopPropagation()} id="editBannerButton">

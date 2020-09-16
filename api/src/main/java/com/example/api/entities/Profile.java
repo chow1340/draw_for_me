@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(
@@ -36,9 +37,14 @@ public class Profile{
     @Column(name="banner_image_url")
     private String bannerImageUrl;
 
+    @JsonIgnore
+    @OneToMany(mappedBy="profile", cascade = CascadeType.ALL)
+    private List<GalleryImage> galleryImages;
+
     public Profile() {
 
     }
+
     public Profile(Long id, User user, String username, String description, @Email String email, String profileImageUrl) {
         this.id = id;
         this.user = user;
@@ -100,4 +106,12 @@ public class Profile{
         this.bannerImageUrl = bannerImageUrl;
     }
 
+    public List<GalleryImage> getGalleryImages() {
+        return galleryImages;
+    }
+
+    public void setGalleryImages(List<GalleryImage> galleryImages) {
+        this.galleryImages = galleryImages;
+    }
 }
+

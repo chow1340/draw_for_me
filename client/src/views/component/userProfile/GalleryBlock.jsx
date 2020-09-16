@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/css/userProfile/galleryBlock.css';
 import Gallery from 'react-photo-gallery';
 import {Dropdown} from 'react-bootstrap';
 import {OPEN_GALLERY_BLOCK_UPLOAD_MODAL} from '../../../redux/actionTypes/user/profileTypes'
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector } from 'react-redux';
+import axios from 'axios';
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import arrayMove from "array-move";
+import Photo from "./Photo";
+
 export const photos = [
     {
       src: "https://source.unsplash.com/2ShvY8Lf6l0/800x599",
-      width: 8,
-      height: 6
+      width: 5,
+      height: 3
     },
     {
       src: "https://source.unsplash.com/Dm-qxdynoEc/800x799",
@@ -92,10 +97,25 @@ export const photos = [
     }
   ];
   
+//Sortable Gallery
+const SortablePhoto = SortableElement(item => <Photo {...item} />);
+const SortableGallery = SortableContainer(({ items }) => (
+  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+));
 
-const GalleryBlock = () => {
+const GalleryBlock = (props) => {
     const dispatch = useDispatch();
-    const handleGalleryBlockUploadOpen = () => {dispatch({type : OPEN_GALLERY_BLOCK_UPLOAD_MODAL})}
+    const [galleryLoaded, setGalleryLoaded] = useState(false);
+    const cProfile = useSelector(state => state.profileInfo);
+    const [galleryPhotos, setGalleryPhotos] = useState(photos);
+    const handleGalleryBlockUploadOpen = () => {dispatch({type : OPEN_GALLERY_BLOCK_UPLOAD_MODAL})};
+
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+      setGalleryPhotos(arrayMove(galleryPhotos, oldIndex, newIndex));
+      console.log(galleryPhotos);
+    };
+
+    //Three dot dropdown
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
       <a
         href=""
@@ -109,9 +129,48 @@ const GalleryBlock = () => {
         <span className="threedots" />
       </a>
     ));
+    
+    useEffect(() => {
+      const cProfileId = cProfile ? cProfile.cProfile.id : "";
+      async function getGalleryImages(cProfileId){
+          await axios.get(
+            "/api/userImage/loadGalleryImages",
+            {
+              params : {
+                userId: cProfileId,
+                offset: 0,
+                limit: 20,
+              }
+            }
+          )
+          .then(res => {
+            var imageList = res.data;
+            if(imageList.length > 0){
+
+              //Insert images
+              for(var i = 0; i < imageList.length; i++) {
+                var image = imageList[i];
+                var newImage = {
+                  src: image.userImageUrl,
+                  width: image.galleryAspectRatioWidth,
+                  height: image.galleryAspectRatioHeight
+                }
+                setGalleryPhotos(oldArray => [newImage, ...oldArray])
+              }
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      if(galleryLoaded === false && cProfileId) {
+        getGalleryImages(cProfileId);
+        setGalleryLoaded(true);
+      }
+    }, [cProfile]);
+
     return(
       <div className = "galleryBlockContainer">
-
         <Dropdown>
           <Dropdown.Toggle as={CustomToggle} />
           <Dropdown.Menu size="sm" title="">
@@ -120,7 +179,9 @@ const GalleryBlock = () => {
         </Dropdown>
 
         <div className = "galleryDisplay">
-          <Gallery photos={photos} />
+          {/* <Gallery photos={galleryPhotos} /> */}
+          <SortableGallery items={galleryPhotos} onSortEnd={onSortEnd} axis={"xy"} />
+
         </div>
       </div>
     )

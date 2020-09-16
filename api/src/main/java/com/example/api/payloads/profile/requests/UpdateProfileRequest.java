@@ -1,4 +1,4 @@
-package com.example.api.payloads.requests;
+package com.example.api.payloads.profile.requests;
 
 public class UpdateProfileRequest {
 

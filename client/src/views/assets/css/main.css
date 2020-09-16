@@ -7,18 +7,25 @@
   min-height: 500px;
 }
 
+input{
+  color: whitesmoke;
+}
+
 /* ------------------------- */
 /* ------- BUTTONS --------- */
 /* ------------------------- */
 .btn-primary:hover {
-  background-color:black;
-  border-color: black;
+  background-color:whitesmoke;
+  border-color: whitesmoke;
+  color: black;
 }
 
 .btn-primary{
-  background-color:black;
-  border-color: black ;
+  background-color:whitesmoke;
+  border-color: whitesmoke ;
+  color: black;
 }
+
 /* ------------------------- */
 /* ------- NAVBAR --------- */
 /* ------------------------- */
@@ -68,4 +75,28 @@
 
 #logInComponent {
   margin-top: 15px;
+}
+
+/* ------------------------- */
+/* ------- MODAL --------- */
+/* ------------------------- */
+
+.modal-content{
+  background-color: #181818	;
+}
+
+.close {
+  color: whitesmoke;
+}
+
+.close:hover{
+  color:whitesmoke;
+}
+
+.aspectInput{
+  color:black;
+  max-width: 80px;
+  min-height: 18px;
+  margin-left: 10px;
+  font-size: 12px;
 }

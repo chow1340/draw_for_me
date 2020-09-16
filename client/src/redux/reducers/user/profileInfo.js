@@ -102,7 +102,7 @@ export default function(state = initialState, action) {
                 galleryBlockUploadModalState: true
             }
         }
-        
+
         default : 
             return {
                 ...state

@@ -1,4 +1,4 @@
-package com.example.api.payloads.requests;
+package com.example.api.payloads.user.requests;
 
 import javax.validation.constraints.NotBlank;
 

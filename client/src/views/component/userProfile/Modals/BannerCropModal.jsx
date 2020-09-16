@@ -20,7 +20,8 @@ const BannerCropModal = () => {
                 imageUrl = {bannerImageUrl}
                 apiUrl = "/api/profile/uploadBannerImage"
                 type = "banner"
-                aspectRatio = {1440/400}
+                aspectRatioWidth = {1440}
+                aspectRatioHeight = {400}
             ></CropperComp>
         </Modal.Body>
     </Modal>
