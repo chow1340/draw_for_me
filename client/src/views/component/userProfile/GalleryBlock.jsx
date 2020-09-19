@@ -3,6 +3,7 @@ import '../../assets/css/userProfile/galleryBlock.css';
 import Gallery from 'react-photo-gallery';
 import {Dropdown, Alert, Button} from 'react-bootstrap';
 import cogoToast from 'cogo-toast';
+import Carousel, { Modal, ModalGateway } from "react-images";
 import {OPEN_GALLERY_BLOCK_UPLOAD_MODAL, SET_GALLERY_SORTABLE_TRUE,SET_GALLERY_SORTABLE_FALSE} from '../../../redux/actionTypes/user/profileTypes'
 import { useDispatch , useSelector } from 'react-redux';
 import axios from 'axios';
@@ -144,15 +145,6 @@ const GalleryBlock = (props) => {
         </div>
        
         <div className = "galleryDisplay">
-        {!galleryLoaded && 
-           <Loader
-              type="Puff"
-              color="#00BFFF"
-              height={100}
-              width={100}
-              timeout={3000} //3 sec
-            />
-          }
           {!gallerySortable && galleryLoaded &&
             <Gallery photos={galleryPhotos} />
           }

@@ -6,6 +6,7 @@ import Lightbox from 'react-image-lightbox';
 import {Dropdown, Modal, Button} from 'react-bootstrap';
 import {useSelector, useDispatch} from 'react-redux';
 import {OPEN_PROFILE_INFO_MODAL, CLOSE_PROFILE_INFO_MODAL, CLOSE_BANNER_CROP_MODAL, OPEN_BANNER_CROP_MODAL, OPEN_PROFILE_CROP_MODAL} from '../../../redux/actionTypes/user/profileTypes'
+import {SET_BANNER_LIGHTBOX_CLOSE,SET_BANNER_LIGHTBOX_OPEN} from '../../../redux/actionTypes/user/lightboxTypes'
 import {FaEdit} from 'react-icons/fa'
 import ProfileBlock from './ProfileBlock.jsx';
 import $ from 'jquery';
@@ -16,8 +17,15 @@ const BannerImage = (props) => {
     // const bannerWidth = document.getElementsByClassName("bannerImgContainer").offsetWidth
 
     //Lightbox
-    const [isOpenZoomedBanner, setIsOpenZoomedBanner] = useState(false);
-    const handleZoomBanner = () => {setIsOpenZoomedBanner(true)}
+    const isOpenProfileLightbox = useSelector(state => state.lightbox.profileLightbox);
+    const isOpenBannerLightbox = useSelector(state => state.lightbox.bannerLightbox);
+    const handleOpenBannerLightbox = (event) => {
+        if(!isOpenProfileLightbox) {
+            event.stopPropagation();
+            dispatch({type: SET_BANNER_LIGHTBOX_OPEN})
+        }
+    }
+    const handleCloseBannerLightbox = () => dispatch({type: SET_BANNER_LIGHTBOX_CLOSE})
     const bannerImageUrl = useSelector(state => state.profileInfo.bannerImageUrl);
    
     //Modal for banner
@@ -63,7 +71,7 @@ const BannerImage = (props) => {
     return (
             <div className="bannerImageContainer" 
             style={backgroundStyle}
-            onClick={handleZoomBanner}
+            onClick={handleOpenBannerLightbox}
             >
                 <div className="bannerImageContainerOverlay"></div>
                 <ProfileBlock/>
@@ -81,10 +89,10 @@ const BannerImage = (props) => {
                 </Dropdown>
                } 
             <div>
-                {isOpenZoomedBanner && showCropModal==false && showProfileCropModal==false &&   (
+                {isOpenBannerLightbox && showCropModal==false && showProfileCropModal==false &&   (
                     <Lightbox
                         mainSrc={bannerImageUrl}
-                        onCloseRequest={()=>setIsOpenZoomedBanner(false)}
+                        onCloseRequest={handleCloseBannerLightbox}
                     >
                     </Lightbox>
                 )}

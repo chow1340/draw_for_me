@@ -29,6 +29,7 @@ function TabPanel(props) {
             cProfile = {props.cProfile}
           ></GalleryBlock>
         )}
+
       </div>
     );
   }
