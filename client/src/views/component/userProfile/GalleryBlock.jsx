@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import '../../assets/css/userProfile/galleryBlock.css';
 import Gallery from 'react-photo-gallery';
 import {Dropdown, Alert, Button} from 'react-bootstrap';
 import cogoToast from 'cogo-toast';
-import Carousel, { Modal, ModalGateway } from "react-images";
 import {OPEN_GALLERY_BLOCK_UPLOAD_MODAL, SET_GALLERY_SORTABLE_TRUE,SET_GALLERY_SORTABLE_FALSE} from '../../../redux/actionTypes/user/profileTypes'
 import { useDispatch , useSelector } from 'react-redux';
 import axios from 'axios';
@@ -11,12 +10,12 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import arrayMove from "array-move";
 import Photo from "./Photo";
 import Loader from 'react-loader-spinner'
-
+import Lightbox from 'react-image-lightbox'
   
 //Sortable Gallery
 const SortablePhoto = SortableElement(item => <Photo {...item} />);
 const SortableGallery = SortableContainer(({ items }) => (
-  <Gallery photos={items} renderImage={props => <SortablePhoto {...props} />} />
+  <Gallery margin={5} photos={items} renderImage={props => <SortablePhoto {...props} />} />
 ));
 
 const GalleryBlock = (props) => {
@@ -26,11 +25,38 @@ const GalleryBlock = (props) => {
     const [galleryLoaded, setGalleryLoaded] = useState(false);
     const cProfile = useSelector(state => state.profileInfo);
     const cProfileId = cProfile ? cProfile.cProfile.id : "";
-
     const [galleryPhotos, setGalleryPhotos] = useState([]);
 
     const handleGalleryBlockUploadOpen = () => {dispatch({type : OPEN_GALLERY_BLOCK_UPLOAD_MODAL})};
 
+    //Lightbox
+    const [currentImage, setCurrentImage] = useState(0);
+    const [isOpenGalleryLightbox, setIsOpenGalleryLightbox] = useState(false);
+
+    const openGalleryLightbox = useCallback((event, { photo, index }) => {
+      setCurrentImage(index);
+      setIsOpenGalleryLightbox(true);
+    }, []);
+
+    const handleCloseBannerLightbox = () => {
+      setIsOpenGalleryLightbox(false);
+    }
+    //Three dot dropdown
+    const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+      <a
+        href=""
+        ref={ref}
+        onClick={e => {
+          e.preventDefault();
+          onClick(e);
+        }}
+      >
+        {children}
+        <span className="threedots" />
+      </a>
+    ));
+
+    //Sorting
     const gallerySortable = useSelector(state => state.galleryImages.gallerySortable);
     const handleGallerySortableOn = () => {dispatch({type : SET_GALLERY_SORTABLE_TRUE})};
     const handleGallerySortableOff = () => {dispatch({type : SET_GALLERY_SORTABLE_FALSE})};
@@ -64,21 +90,6 @@ const GalleryBlock = (props) => {
       handleGallerySortableOff();
     }
 
-    //Three dot dropdown
-    const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-      <a
-        href=""
-        ref={ref}
-        onClick={e => {
-          e.preventDefault();
-          onClick(e);
-        }}
-      >
-        {children}
-        <span className="threedots" />
-      </a>
-    ));
-    
     useEffect(() => {
       async function getGalleryImages(cProfileId){
           await axios.get(
@@ -94,8 +105,6 @@ const GalleryBlock = (props) => {
           .then(res => {
             var imageList = res.data;
             if(imageList.length > 0){
-              // console.log(JSON.stringify(res.data));
-              console.log(res.data);
               //Insert images
               for(var i = 0; i < imageList.length; i++) {
                 var image = imageList[i];
@@ -146,12 +155,24 @@ const GalleryBlock = (props) => {
        
         <div className = "galleryDisplay">
           {!gallerySortable && galleryLoaded &&
-            <Gallery photos={galleryPhotos} />
+            <Gallery 
+            photos={galleryPhotos}
+            onClick={openGalleryLightbox}
+            margin={2}
+            // renderImage={props => <SortablePhoto {...props} />}
+            />
           }
           {gallerySortable && galleryLoaded &&
             <SortableGallery items={galleryPhotos} onSortEnd={onSortEnd} axis={"xy"} />
           }
         </div>
+        {isOpenGalleryLightbox && 
+          <Lightbox
+            mainSrc={galleryPhotos[currentImage].src}
+            onCloseRequest={handleCloseBannerLightbox}
+          >
+          </Lightbox>
+        }
       </div>
     )
 };
