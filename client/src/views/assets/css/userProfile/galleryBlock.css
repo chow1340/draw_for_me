@@ -2,10 +2,27 @@
     padding: 20px 80px;
 }
 
+.galleryTop {
+    min-height: 50px;
+}
+
+.gallerySortAlert{
+    width:90%;
+    display: inline-block;
+    background-color: #C3073F;
+    border: none;
+    color:whitesmoke
+}
+
+.rightButtons{
+    display: inline;
+    float:right;
+}
+.rightButtons > button{
+    margin-left: 10px;
+}
 .dropdown {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 9px;
+    float: right;
 }
 
 .dropdown > a:hover {

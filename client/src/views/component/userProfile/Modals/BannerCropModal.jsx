@@ -22,6 +22,7 @@ const BannerCropModal = () => {
                 type = "banner"
                 aspectRatioWidth = {1440}
                 aspectRatioHeight = {400}
+                successMessage = "Banner saved"
             ></CropperComp>
         </Modal.Body>
     </Modal>

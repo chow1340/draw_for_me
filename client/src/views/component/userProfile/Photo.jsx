@@ -10,6 +10,8 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
     imgStyle.top = top;
   }
 
+  imgStyle.boxShadow = " 0px 0px 5px 5px rgba(20,20,20,1)";
+  
   const handleClick = event => {
     onClick(event, { photo, index });
     console.log(event);

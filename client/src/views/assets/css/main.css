@@ -15,15 +15,43 @@ input{
 /* ------- BUTTONS --------- */
 /* ------------------------- */
 .btn-primary:hover {
-  background-color:whitesmoke;
+  background-color: rgba(0,0,0,0);
   border-color: whitesmoke;
-  color: black;
+  color: whitesmoke;
 }
 
 .btn-primary{
-  background-color:whitesmoke;
-  border-color: whitesmoke ;
-  color: black;
+  background-color: rgba(0,0,0,0);
+  border-color: whitesmoke;
+  color: whitesmoke;
+  font-size:13px;
+}
+
+.btn:hover {
+  background-color: rgba(0,0,0,0);
+  border-color: whitesmoke;
+  color: whitesmoke;
+}
+
+.btn-primary:active{
+  background-color: rgba(0,0,0,1);
+  box-shadow:none;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-primary.dropdown-toggle:focus {
+  box-shadow:none;
+}
+.btn:focus{
+  border-color: whitesmoke;
+  color: whitesmoke;
+  box-shadow:none;
+  background-color: rgba(0,0,0,0);
+}
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+  background-color: rgba(0,0,0,1);
+  border-color: whitesmoke;
+  color: whitesmoke;
+  box-shadow:none;
 }
 
 /* ------------------------- */

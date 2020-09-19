@@ -2,6 +2,7 @@ package com.example.api.controllers;
 
 import com.example.api.entities.GalleryImage;
 import com.example.api.entities.Image;
+import com.example.api.payloads.profile.requests.AdjustGalleryOrderRequest;
 import com.example.api.payloads.profile.requests.GetGalleryImagesRequest;
 import com.example.api.payloads.profile.requests.UploadGalleryImageRequest;
 import com.example.api.services.ImageService;
@@ -16,7 +17,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/userImage")
+@RequestMapping("/api/galleryImage")
 public class GalleryController {
     @Autowired
     ImageService imageService;
@@ -40,6 +41,12 @@ public class GalleryController {
             return new ResponseEntity<String>("Image not found", HttpStatus.BAD_REQUEST);
         }
         imageService.uploadGalleryImage(request);
-        return new ResponseEntity<String>("Profile has been updated", HttpStatus.OK);
+        return new ResponseEntity<String>("Gallery has been updated", HttpStatus.OK);
+    }
+
+    @PostMapping("/adjustGalleryOrder")
+    public ResponseEntity<?> adjustGalleryOrder(@RequestBody AdjustGalleryOrderRequest request){
+        imageService.adjustGalleryOrder(Long.valueOf(request.getGalleryId()), request.getNewOrder());
+        return new ResponseEntity<String>("Gallery has been adjusted", HttpStatus.OK);
     }
 }

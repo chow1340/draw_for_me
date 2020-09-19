@@ -3,7 +3,8 @@ import {useDispatch} from "react-redux";
 import Cropper from "react-cropper";
 import axios from "axios";
 import {Button} from 'react-bootstrap'
-import {SET_BANNER, CLOSE_BANNER_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL,SET_PROFILE_IMAGE} from '../../../redux/actionTypes/user/profileTypes'
+import {SET_BANNER, CLOSE_BANNER_CROP_MODAL, CLOSE_PROFILE_CROP_MODAL,SET_PROFILE_IMAGE, CLOSE_GALLERY_BLOCK_UPLOAD_MODAL} from '../../../redux/actionTypes/user/profileTypes'
+import cogoToast from 'cogo-toast';
 
 export const CropperComp = (props) => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export const CropperComp = (props) => {
 
   const handleCloseBanner = (event) => {dispatch({type : CLOSE_BANNER_CROP_MODAL})};
   const handleProfileCropClose = (event) => {dispatch({type : CLOSE_PROFILE_CROP_MODAL}) };
+  const handleGalleryBlockUploadModalClose = () => {dispatch({type : CLOSE_GALLERY_BLOCK_UPLOAD_MODAL})};
 
   //Aspect ratio
   const handleAspectRatioWidthChange = (e) => {
@@ -66,6 +68,8 @@ export const CropperComp = (props) => {
         handleCloseBanner();
       } else if(props.type == "profileImage"){
         handleProfileCropClose();
+      } else if(props.type == "galleryBlock"){
+
       }
       dispatch({type: CLOSE_BANNER_CROP_MODAL});
       return;
@@ -99,8 +103,8 @@ export const CropperComp = (props) => {
         }
       })
       .then(res => {
-          console.log(res);
-          console.log(formData.get("file"));
+        cogoToast.success(props.successMessage);
+        handleGalleryBlockUploadModalClose();
       })
       .catch(err => {
           console.log(err.response.data);

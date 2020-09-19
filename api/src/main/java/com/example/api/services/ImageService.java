@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -27,6 +28,11 @@ public class ImageService {
 
     @Autowired
     UserService userService;
+
+    public GalleryImage getGalleryImageByGalleryId(Long galleryId){
+        Optional<GalleryImage> galleryImage = galleryImageRepository.findById(galleryId);
+        return galleryImage.get();
+    }
 
     public List<Image> getImagesByIdAndOffset(Long userId, int offset, int limit){
         List<Image> res = imageRepository.findByIdWithOffset(userId, offset, limit);
@@ -63,5 +69,11 @@ public class ImageService {
             galleryImage.setImageOrder(nextAvailableOrderNumber);
             galleryImageRepository.save(galleryImage);
         }
+    }
+
+    public void adjustGalleryOrder(Long galleryId, String newOrder){
+        GalleryImage galleryImage = getGalleryImageByGalleryId(galleryId);
+        galleryImage.setImageOrder(Integer.parseInt(newOrder));
+        galleryImageRepository.save(galleryImage);
     }
 }

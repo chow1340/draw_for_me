@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import './views/assets/vendor/bootstrap/css/bootstrap.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './views/assets/css/main.css';
 import Menu from './views/Menu';
 

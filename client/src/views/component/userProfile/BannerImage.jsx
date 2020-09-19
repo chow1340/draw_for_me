@@ -17,6 +17,7 @@ const BannerImage = (props) => {
 
     //Lightbox
     const [isOpenZoomedBanner, setIsOpenZoomedBanner] = useState(false);
+    const handleZoomBanner = () => {setIsOpenZoomedBanner(true)}
     const bannerImageUrl = useSelector(state => state.profileInfo.bannerImageUrl);
    
     //Modal for banner
@@ -61,7 +62,9 @@ const BannerImage = (props) => {
     });
     return (
             <div className="bannerImageContainer" 
-            style={backgroundStyle}>
+            style={backgroundStyle}
+            onClick={handleZoomBanner}
+            >
                 <div className="bannerImageContainerOverlay"></div>
                 <ProfileBlock/>
                {isOwnerOfProfile && 
