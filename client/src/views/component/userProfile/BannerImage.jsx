@@ -14,7 +14,6 @@ const BannerImage = (props) => {
     const dispatch = useDispatch();
     const isOwnerOfProfile = useSelector(state => state.profileInfo.isOwnerOfProfile);
 
-    // const bannerWidth = document.getElementsByClassName("bannerImgContainer").offsetWidth
 
     //Lightbox
     const isOpenProfileLightbox = useSelector(state => state.lightbox.profileLightbox);
@@ -52,8 +51,13 @@ const BannerImage = (props) => {
     }
 
     $(window).scroll(function() {
-        var scrolledY = $(window).scrollTop();
-        $('.bannerImageContainer').css('background-position', 'left ' + ((scrolledY)) + 'px');
+        // var scrolledY = $(window).scrollTop();
+        // console.log(scrolledY)
+        // if(scrolledY < 58){
+        //     // $('.bannerImageContainer').css('background-position', 'left ' + ((scrolledY)) + 'px');
+        // } else {
+        //     $('.bannerImageContainer').css('background-position', 'left ' + ((scrolledY)-58) + 'px');
+        // }
       });
 
       $(document).ready(function(){

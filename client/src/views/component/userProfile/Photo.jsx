@@ -1,4 +1,5 @@
 import React from "react";
+import {FaEdit} from 'react-icons/fa'
 
 const imgWithClick = { cursor: "pointer" };
 
@@ -12,18 +13,30 @@ const Photo = ({ index, onClick, photo, margin, direction, top, left }) => {
 
   imgStyle.boxShadow = " 0px 0px 5px 5px rgba(20,20,20,1)";
   
-  const handleClick = event => {
-    onClick(event, { photo, index });
-    console.log(event);
-  };
+
+  const handlePhotoEdit = (event) => {
+    console.log(photo);
+  }
 
   return (
-    <img
-      style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
-      {...photo}
-      onClick={onClick ? handleClick : null}
-      alt="img"
-    />
+    <div className="photoContainer">
+      <img
+        style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
+        {...photo}
+        alt="img"
+        className = "sortableGalleryImage"
+      />
+      <button 
+      className = "photoEdit"
+      onClick = {handlePhotoEdit}
+      >
+        <FaEdit
+          className="photoEditIcon"
+        ></FaEdit>
+      </button>
+
+    </div>
+
   );
 };
 

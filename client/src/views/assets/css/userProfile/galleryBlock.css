@@ -66,3 +66,47 @@
     width: 'auto';
     height: '100%';
 }
+
+/* LIGHTBOX */
+
+.ril__imagePrev, .ril__imageNext{
+    display: none;
+}
+
+
+/* Photo */
+.photoContainer{
+    position: relative;
+}
+
+.photoEdit{
+    position: absolute;
+    z-index: 100;
+    right: 15px;
+    bottom: 15px;
+    box-shadow: 0px 10px 14px -7px #e77171;
+	background:linear-gradient(to bottom, #C3073F 5%, #C3073F 100%);
+	background-color:#C3073F;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;  
+	font-size:20px;
+	font-weight:bold;
+	padding: 0px 8px 6px 9px;
+	text-decoration:none;
+    text-shadow:0px 0px 0px #C3073F;
+    border: none
+}
+
+.photoEdit:active {
+	position: absolute;
+    bottom:14px;
+    right: 14px;
+}
+
+.photoEditIcon{
+    position:relative;
+    z-index:-99
+}

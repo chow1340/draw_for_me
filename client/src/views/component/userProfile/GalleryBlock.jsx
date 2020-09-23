@@ -3,7 +3,8 @@ import '../../assets/css/userProfile/galleryBlock.css';
 import Gallery from 'react-photo-gallery';
 import {Dropdown, Alert, Button} from 'react-bootstrap';
 import cogoToast from 'cogo-toast';
-import {OPEN_GALLERY_BLOCK_UPLOAD_MODAL, SET_GALLERY_SORTABLE_TRUE,SET_GALLERY_SORTABLE_FALSE} from '../../../redux/actionTypes/user/profileTypes'
+import {OPEN_GALLERY_BLOCK_UPLOAD_MODAL, SET_GALLERY_SORTABLE_TRUE,SET_GALLERY_SORTABLE_FALSE} from '../../../redux/actionTypes/user/profileTypes';
+import {SET_GALLERY_PHOTOS, ADD_GALLERY_PHOTO} from '../../../redux/actionTypes/user/galleryTypes'
 import { useDispatch , useSelector } from 'react-redux';
 import axios from 'axios';
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
@@ -25,7 +26,9 @@ const GalleryBlock = (props) => {
     const [galleryLoaded, setGalleryLoaded] = useState(false);
     const cProfile = useSelector(state => state.profileInfo);
     const cProfileId = cProfile ? cProfile.cProfile.id : "";
-    const [galleryPhotos, setGalleryPhotos] = useState([]);
+    const test = 1;
+    // Gallery Photos
+    const galleryPhotos = useSelector(state=>state.galleryImages.galleryPhotos)
 
     const handleGalleryBlockUploadOpen = () => {dispatch({type : OPEN_GALLERY_BLOCK_UPLOAD_MODAL})};
 
@@ -38,7 +41,7 @@ const GalleryBlock = (props) => {
       setIsOpenGalleryLightbox(true);
     }, []);
 
-    const handleCloseBannerLightbox = () => {
+    const handleCloseGalleryLightbox = () => {
       setIsOpenGalleryLightbox(false);
     }
     //Three dot dropdown
@@ -61,12 +64,14 @@ const GalleryBlock = (props) => {
     const handleGallerySortableOn = () => {dispatch({type : SET_GALLERY_SORTABLE_TRUE})};
     const handleGallerySortableOff = () => {dispatch({type : SET_GALLERY_SORTABLE_FALSE})};
     const onSortEnd = ({ oldIndex, newIndex }) => {
-      setGalleryPhotos(arrayMove(galleryPhotos, oldIndex, newIndex));
+      // setGalleryPhotos(arrayMove(galleryPhotos, oldIndex, newIndex));
+      dispatch({type: SET_GALLERY_PHOTOS, payload:arrayMove(galleryPhotos, oldIndex, newIndex)})
     };
 
     const handleSaveOrder = () => {
       if(gallerySortable) {
         for(var i = 0; i < galleryPhotos.length; i++) {
+          //Change order
           if(i != galleryPhotos[i].originalOrder){
             axios.post(
               "/api/galleryImage/adjustGalleryOrder",
@@ -89,9 +94,13 @@ const GalleryBlock = (props) => {
       cogoToast.success("Updated Gallery");
       handleGallerySortableOff();
     }
-
+    // console.log(cProfileId)
+    if(cProfileId != null) {
+      
+    }
     useEffect(() => {
       async function getGalleryImages(cProfileId){
+        console.log(cProfileId)
           await axios.get(
             "/api/galleryImage/loadGalleryImages",
             {
@@ -115,7 +124,8 @@ const GalleryBlock = (props) => {
                   originalOrder: image.imageOrder,
                   galleryId: image.id
                 }
-                setGalleryPhotos(oldArray => [newImage, ...oldArray])
+                // setGalleryPhotos(oldArray => [newImage, ...oldArray])
+                dispatch({type: ADD_GALLERY_PHOTO, payload: newImage })
               }
             }
           })
@@ -123,6 +133,7 @@ const GalleryBlock = (props) => {
             console.log(err);
           })
       }
+      console.log(galleryLoaded, cProfileId)
       if(galleryLoaded === false && cProfileId) {
         getGalleryImages(cProfileId);
         setGalleryLoaded(true);
@@ -169,7 +180,19 @@ const GalleryBlock = (props) => {
         {isOpenGalleryLightbox && 
           <Lightbox
             mainSrc={galleryPhotos[currentImage].src}
-            onCloseRequest={handleCloseBannerLightbox}
+            nextSrc={galleryPhotos[(currentImage + 1)]}
+            prevSrc={galleryPhotos[(currentImage - 1)]}
+            onCloseRequest={()=> setIsOpenGalleryLightbox(false)
+            }
+            clickOutsideToClose = {true}
+            onMovePrevRequest={() =>
+              setCurrentImage(currentImage - 1)
+            }
+            onMoveNextRequest={() =>
+              setCurrentImage(currentImage + 1)
+            }
+            className = "galleryLightbox"
+            toolbarButtons={['test']}
           >
           </Lightbox>
         }

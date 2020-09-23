@@ -10,6 +10,8 @@ import {
     CLOSE_BANNER_CROP_MODAL,
     CLOSE_GALLERY_BLOCK_UPLOAD_MODAL,
     OPEN_GALLERY_BLOCK_UPLOAD_MODAL,
+    OPEN_GALLERY_EDIT_MODAL,
+    CLOSE_GALLERY_EDIT_MODAL
 } from '../../actionTypes/user/profileTypes'
 
 const initialState = {
@@ -18,6 +20,7 @@ const initialState = {
     cropModalState : false,
     profileInfoModalState : false,
     galleryBlockUploadModalState : false,
+    galleryEditModalState: false,
     cropProfileState : false,
     profileImageUrl : "",
     isOwnerOfProfile : false,
@@ -100,6 +103,20 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 galleryBlockUploadModalState: true
+            }
+        }
+        
+        case CLOSE_GALLERY_EDIT_MODAL : {
+            return {
+                ...state,
+                galleryEditModalState: false
+            }
+        }
+
+        case OPEN_GALLERY_EDIT_MODAL : {
+            return {
+                ...state,
+                galleryEditModalState: true
             }
         }
 

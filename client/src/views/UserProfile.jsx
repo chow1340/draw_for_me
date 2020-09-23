@@ -5,6 +5,7 @@ import ProfileCropModal from './component/userProfile/Modals/ProfileCropModal';
 import ProfileEditorModal from './component/userProfile/Modals/ProfileEditorModal';
 import BannerCropModal from './component/userProfile/Modals/BannerCropModal';
 import GalleryBlockUploadModal from './component/userProfile/Modals/GalleryBlockUploadModal';
+import GalleryEditModal from './component/userProfile/Modals/GalleryEditModal';
 import {useDispatch, useSelector} from 'react-redux'
 import {SET_IS_OWNER_OF_PROFILE,SET_BANNER, SET_PROFILE_IMAGE, SET_C_PROFILE} from '../redux/actionTypes/user/profileTypes'
 import AppBar from '@material-ui/core/AppBar';
@@ -24,12 +25,19 @@ function TabPanel(props) {
         aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === 0 && (
+        {value === 0 && index == 0 &&(
           <GalleryBlock
             cProfile = {props.cProfile}
           ></GalleryBlock>
         )}
+        
+        {value === 1 && index === 1 && (
+          "test2"
+        )}
 
+        {value === 2 &&(
+          "tab3"
+        )}
       </div>
     );
   }
@@ -98,21 +106,20 @@ const UserProfile = (props) => {
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0} cProfile={cProfile}>
-          
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
                 </TabPanel>
-
+{/* 
                 <TabPanel value={value} index={2}>
-                </TabPanel>
+                </TabPanel> */}
 
             </div>
             <BannerCropModal/>
             <ProfileEditorModal/>
             <ProfileCropModal/>
             <GalleryBlockUploadModal />
-          
+            <GalleryEditModal />
         </div>
     );
 }

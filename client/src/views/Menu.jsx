@@ -87,7 +87,7 @@ const Menu = (props) => {
         <Router>
         <div>
        
-        <Navbar fixed="top" expand="md">
+        <Navbar expand="md">
         <NavbarBrand id="navbarTitle" href="/">APP_TITLE</NavbarBrand>
         <NavbarToggler onClick={toggle} className="mr-2"/>
           <Nav className="ml-auto" navbar>
