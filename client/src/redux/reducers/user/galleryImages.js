@@ -17,6 +17,7 @@ export default function(state = initialState, action){
         }
 
         case(ADD_GALLERY_PHOTO) : {
+            console.log(state.galleryPhotos)
             return {
                 ...state,
                 galleryPhotos : [...state.galleryPhotos, action.payload]

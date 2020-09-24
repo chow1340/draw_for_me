@@ -72,6 +72,7 @@ const GalleryBlock = (props) => {
       if(gallerySortable) {
         for(var i = 0; i < galleryPhotos.length; i++) {
           //Change order
+          console.log(i, galleryPhotos[i].galleryId)
           if(i != galleryPhotos[i].originalOrder){
             axios.post(
               "/api/galleryImage/adjustGalleryOrder",
@@ -112,10 +113,11 @@ const GalleryBlock = (props) => {
             }
           )
           .then(res => {
+            console.log(res.data)
             var imageList = res.data;
             if(imageList.length > 0){
               //Insert images
-              for(var i = 0; i < imageList.length; i++) {
+              for(var i = imageList.length-1; i >= 0 ; i--) {
                 var image = imageList[i];
                 var newImage = {
                   src: image.image.imageUrl,
